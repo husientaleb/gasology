@@ -44,6 +44,212 @@ const QUIZ_QUESTIONS = [
   {q:"What is the first-line treatment for local anesthetic systemic toxicity (LAST)?",a:"20% Lipid emulsion (Intralipid)",options:["Epinephrine 1mg IV","20% Lipid emulsion (Intralipid)","Sodium bicarbonate","Calcium gluconate"],exp:"Lipid emulsion 1.5mL/kg bolus followed by 0.25mL/kg/min infusion. Mechanism: 'lipid sink' sequesters lipophilic LA. Also: stop injection, airway management, benzodiazepines for seizures, avoid vasopressin/Ca-channel blockers."},
 ];
 
+
+const REVIEW_TOPICS = ["Airway","Cardiac","OB","Neuro","Pediatric","Regional","Pharmacology","Critical Care","Pain","TIVA"];
+
+const REVIEW_DATA = {
+  "Airway": {
+    emoji:"🫁",
+    concepts:[
+      "Difficult airway prediction: LEMON (Look, Evaluate 3-3-2, Mallampati, Obstruction, Neck mobility)",
+      "Mallampati I–IV: higher class = harder laryngoscopy; Class III/IV predict difficult intubation",
+      "RSI indications: full stomach, GERD, trauma, bowel obstruction, pregnancy >20wks",
+      "Cannot intubate, cannot oxygenate (CICO): surgical airway is the only option — front of neck access",
+      "Video laryngoscopy improves glottic view but does not guarantee successful intubation",
+      "Awake fiberoptic intubation: gold standard for anticipated difficult airway with spontaneous breathing",
+      "Extubation is as dangerous as intubation — plan for potentially difficult reintubation",
+    ],
+    keywords:["LEMON","Mallampati","RSI","CICO","FOI","DAS Guidelines","Cormack-Lehane","Bougie","VL","Cricothyrotomy","Apneic Oxygenation","NODESAT"],
+    highyield:[
+      "Succinylcholine 1.5mg/kg for RSI — fastest onset, shortest duration",
+      "Rocuronium 1.2mg/kg = equivalent RSI conditions; reversed by sugammadex 16mg/kg",
+      "Preoxygenation goal: EtO2 >90% — provides ~8 min of safe apnea in healthy adults",
+      "Thyromental distance <6cm = difficult laryngoscopy predictor",
+    ],
+    refs:{"M&M":"Chapter 19–20","Miller's":"Chapter 44–45","Barash":"Chapter 28"}
+  },
+  "Cardiac": {
+    emoji:"❤️",
+    concepts:[
+      "Severe AS: AVA <1.0cm², mean gradient >40mmHg — preserve sinus rhythm, avoid tachycardia and vasodilation",
+      "Mitral stenosis: slow HR to allow diastolic filling, maintain sinus rhythm, avoid fluid overload",
+      "Ischemic heart disease: balance O2 supply/demand — avoid tachycardia, hypotension, anemia",
+      "HOCM: avoid decreased preload, decreased afterload, tachycardia, and positive inotropy",
+      "Cardiac risk stratification: RCRI score for non-cardiac surgery; >3 factors = high risk",
+      "Beta-blockers: continue perioperatively if already prescribed; do NOT start de novo on day of surgery",
+      "TEE is gold standard for intraoperative cardiac monitoring in high-risk cases",
+    ],
+    keywords:["SVR","Preload","Afterload","SV","CO","PCWP","TEE","IABP","CPB","Cardioplegia","RCRI","Lee Index","AS","MR","HOCM","EF"],
+    highyield:[
+      "AS triad: syncope, angina, dyspnea — average survival 2–3 years without valve replacement",
+      "Phenylephrine preferred vasopressor in AS — increases SVR without tachycardia",
+      "HOCM treatment: phenylephrine + volume + beta-blocker; avoid epinephrine",
+      "Perioperative MI most common day 1–3 postop — usually non-ST elevation",
+    ],
+    refs:{"M&M":"Chapter 21","Miller's":"Chapter 54–55","Barash":"Chapter 42"}
+  },
+  "OB": {
+    emoji:"🤰",
+    concepts:[
+      "Physiologic changes: ↑CO 40%, ↑blood volume 45%, ↑O2 consumption 20%, ↓FRC 20%, ↓MAC 30%",
+      "Aortocaval compression: occurs >20wks — left uterine displacement mandatory in supine position",
+      "Aspiration risk: delayed gastric emptying + increased abdominal pressure — RSI for GA",
+      "Spinal for C-section: hyperbaric bupivacaine 0.75% + fentanyl + morphine; T4 level required",
+      "Preeclampsia: BP ≥140/90 + proteinuria or end-organ damage after 20wks gestation",
+      "Mag toxicity: loss of DTRs at 7–10 mEq/L, respiratory arrest at 15 mEq/L — antidote: Ca gluconate",
+      "Neuraxial anesthesia preferred for labor; GA carries higher maternal mortality risk",
+    ],
+    keywords:["FRC","MAC","Aortocaval","RSI","Spinal","Epidural","CSE","Preeclampsia","Magnesium","Oxytocin","PPH","Uterotonic","Placenta Previa","Abruption"],
+    highyield:[
+      "Minimum fasting: 2hr clear liquids, 6hr light meal for elective C-section",
+      "Spinal hypotension: treat with phenylephrine (preferred) or ephedrine in bradycardia",
+      "Oxytocin: slow IV push — rapid bolus causes hypotension and tachycardia",
+      "Failed intubation in OB: higher rate than general population due to airway edema",
+    ],
+    refs:{"M&M":"Chapter 43","Miller's":"Chapter 77","Barash":"Chapter 51"}
+  },
+  "Neuro": {
+    emoji:"🧠",
+    concepts:[
+      "ICP normal: 5–15 mmHg; CPP = MAP – ICP; target CPP >60–70 mmHg",
+      "Cushing reflex: hypertension + bradycardia + irregular respirations = imminent herniation",
+      "Cerebral autoregulation: CBF constant with MAP 50–150 mmHg; lost in TBI and after SAH",
+      "Maneuvers to reduce ICP: HOB 30°, hyperventilation (temporary), mannitol, hypertonic saline, CSF drainage",
+      "Volatile agents: increase CBF and ICP at >1 MAC — use <0.5 MAC or TIVA for neurosurgery",
+      "Motor evoked potentials (MEPs): sensitive to neuromuscular blockade and volatile agents",
+      "Vasospasm after SAH: peaks day 4–14 — treat with nimodipine, HHH therapy (now abandoned for euvolemia)",
+    ],
+    keywords:["ICP","CPP","CBF","CMRO2","Autoregulation","Mannitol","HTS","MAP","MEP","SSEP","Burst Suppression","TIVA","Propofol","Dexamethasone","Nimodipine"],
+    highyield:[
+      "PaCO2 most potent regulator of CBF — CO2 causes cerebral vasodilation",
+      "Mannitol 0.25–1g/kg — works via osmotic gradient and rheologic effects",
+      "Avoid succinylcholine in raised ICP — transient ICP spike, theoretical concern",
+      "TIVA preferred for neurophysiologic monitoring (MEPs, SSEPs)",
+    ],
+    refs:{"M&M":"Chapter 27","Miller's":"Chapter 57–58","Barash":"Chapter 43"}
+  },
+  "Pediatric": {
+    emoji:"👶",
+    concepts:[
+      "Weight estimate: (age+4)×2 kg for children 1–10 years",
+      "Inhalation induction preferred when no IV — sevoflurane is agent of choice",
+      "Larynx is cephalad (C3–4) and anterior; epiglottis is omega-shaped and floppy",
+      "ETT size: (age/4)+4 uncuffed; (age/4)+3.5 cuffed; cuffed tubes now preferred in most ages",
+      "Maintenance fluids: 4mL/kg/hr first 10kg, 2mL/kg/hr next 10kg, 1mL/kg/hr remaining",
+      "Subglottis is narrowest point in pediatric airway (vs glottis in adults)",
+      "Emergence agitation: common with sevoflurane; dexmedetomidine and midazolam reduce incidence",
+    ],
+    keywords:["Croup","Epiglottitis","LMA","Cuffed ETT","Sevoflurane","Emergence Agitation","TONSIL score","OSA","MH","Atropine","Ketamine","4-2-1 Rule"],
+    highyield:[
+      "NPO: 2-4-6-8 rule — 2hr clear, 4hr breast milk, 6hr formula/light meal, 8hr full meal",
+      "Atropine 0.02mg/kg (min 0.1mg) — bradycardia common with succinylcholine in children",
+      "MH: most common trigger is volatile agents + succinylcholine; treat with dantrolene 2.5mg/kg",
+      "Neonates: obligate nasal breathers; highly vagal — pretreat with atropine",
+    ],
+    refs:{"M&M":"Chapter 44","Miller's":"Chapter 93–94","Barash":"Chapter 54"}
+  },
+  "Regional": {
+    emoji:"💉",
+    concepts:[
+      "Spinal: subarachnoid injection, single shot, rapid onset, dense block; hypotension common",
+      "Epidural: epidural space, can be catheterized for continuous infusion, slower onset",
+      "LAST: systemic absorption or intravascular injection of local anesthetic — lipid sink treatment",
+      "Nerve blocks: US-guided preferred; always check for anticoagulation before neuraxial",
+      "ASRA guidelines: hold LMWH 12hr (prophylactic) or 24hr (therapeutic) before neuraxial",
+      "Interscalene block: covers shoulder/proximal humerus; always causes ipsilateral phrenic nerve block",
+      "Spinal hematoma: presents as back pain + progressive weakness — MRI and surgical decompression within 6–12hr",
+    ],
+    keywords:["Spinal","Epidural","CSE","LAST","Intralipid","Bupivacaine","Ropivacaine","Lidocaine","ASRA","TNS","PDPH","Blood Patch","Phrenic","Horner's","US-guidance"],
+    highyield:[
+      "LAST treatment: 20% lipid emulsion 1.5mL/kg bolus — do NOT use propofol as substitute",
+      "Interscalene always causes phrenic palsy — contraindicated in contralateral phrenic palsy or severe COPD",
+      "PDPH: positional headache after dural puncture — treat with caffeine, epidural blood patch",
+      "Max safe dose: bupivacaine 2.5mg/kg, lidocaine 4.5mg/kg (7mg/kg with epi)",
+    ],
+    refs:{"M&M":"Chapter 45–46","Miller's":"Chapter 51–52","Barash":"Chapter 36–37"}
+  },
+  "Pharmacology": {
+    emoji:"💊",
+    concepts:[
+      "MAC (minimum alveolar concentration): ED50 of inhaled agent preventing movement to surgical incision in 50%",
+      "MAC decreases with: age, hypothermia, opioids, pregnancy, acute alcohol intoxication, hypotension",
+      "MAC increases with: hyperthermia, chronic alcohol use, hypernatremia, hyperthyroidism",
+      "Context-sensitive half-time: time for plasma drug level to fall 50% after infusion — varies with infusion duration",
+      "Propofol: GABA-A agonist; antiemetic at sub-hypnotic doses; pain on injection (use lidocaine pretreatment)",
+      "Ketamine: NMDA antagonist; bronchodilator; preserves airway reflexes; dissociative at high doses",
+      "Neuromuscular monitoring: TOF ratio — ratio of 4th to 1st twitch; <0.9 = residual block",
+    ],
+    keywords:["MAC","GABA","NMDA","TOF","PTC","Phase I/II block","Plasma Esterases","Hofmann","Context Half-Time","Lipophilicity","Protein Binding","Redistribution","Tachyphylaxis"],
+    highyield:[
+      "Desflurane blood:gas 0.45 (fastest); halothane 2.5 (slowest) — lower = faster emergence",
+      "Succinylcholine: only depolarizing NMBA; plasma cholinesterase metabolism; 8–12min duration",
+      "Fentanyl 100x morphine; sufentanil 1000x; remifentanil ultra-short (esterase metabolism)",
+      "Neostigmine must be paired with glycopyrrolate to prevent muscarinic side effects",
+    ],
+    refs:{"M&M":"Chapter 7–11","Miller's":"Chapter 26–35","Barash":"Chapter 18–22"}
+  },
+  "Critical Care": {
+    emoji:"🏥",
+    concepts:[
+      "ARDS: PaO2/FiO2 <300 with bilateral infiltrates; mild 200–300, moderate 100–200, severe <100",
+      "Lung-protective ventilation: TV 6mL/kg IBW, plateau pressure <30cmH2O, PEEP titration",
+      "Sepsis-3: life-threatening organ dysfunction from dysregulated host response to infection",
+      "Vasopressors: norepinephrine is first-line vasopressor in septic shock; add vasopressin as second",
+      "MODS: sequential organ failure — renal, hepatic, pulmonary, coagulation, CNS",
+      "Prone positioning: improves V/Q matching in ARDS with P/F <150; reduces mortality",
+      "ECMO: venovenous for respiratory failure; venoarterial for combined cardiorespiratory failure",
+    ],
+    keywords:["ARDS","Berlin Definition","LPV","PEEP","Plateau Pressure","Driving Pressure","Sepsis","SOFA","qSOFA","Norepinephrine","Vasopressin","MODS","ECMO","Prone","NMB in ARDS"],
+    highyield:[
+      "Driving pressure (plateau – PEEP) <15cmH2O associated with improved ARDS survival",
+      "Steroids in septic shock: hydrocortisone 200mg/day if vasopressor-refractory",
+      "Early goal-directed therapy replaced by permissive hypotension in trauma resuscitation",
+      "ACURASYS/ROSE trials: routine NMB in ARDS no longer recommended",
+    ],
+    refs:{"M&M":"Chapter 57","Miller's":"Chapter 97–98","Barash":"Chapter 58"}
+  },
+  "Pain": {
+    emoji:"⚡",
+    concepts:[
+      "Multimodal analgesia: combines opioid and non-opioid agents to reduce opioid consumption and side effects",
+      "WHO analgesic ladder: Step 1 (non-opioid), Step 2 (weak opioid), Step 3 (strong opioid)",
+      "NMDA antagonists (ketamine): reduce opioid tolerance and hyperalgesia; useful in opioid-tolerant patients",
+      "Gabapentinoids: reduce acute and chronic post-surgical pain; mechanism via calcium channel α2δ subunit",
+      "Neuraxial analgesia: epidural morphine/hydromorphone — most effective for thoracic/abdominal pain",
+      "Opioid-induced hyperalgesia: paradoxical increased pain with opioid use — treat with dose reduction",
+      "ERAS protocols: pre-emptive multimodal analgesia reduces opioid requirements and accelerates recovery",
+    ],
+    keywords:["Multimodal","NSAID","Acetaminophen","Gabapentin","Pregabalin","Ketamine","OIH","NMDA","Neuraxial","PCA","Tolerance","Opioid-sparing","ERAS","TAP block","Liposomal Bupivacaine"],
+    highyield:[
+      "Celecoxib + acetaminophen + gabapentin preoperatively reduces postop opioid 30–50%",
+      "IV acetaminophen 1g q6h — proven opioid-sparing, especially in opioid-naive patients",
+      "Ketamine 0.1–0.5mg/kg/hr infusion reduces opioid consumption in chronic opioid users",
+      "TAP block: covers T10–L1 dermatomes; useful for abdominal surgery below umbilicus",
+    ],
+    refs:{"M&M":"Chapter 47–48","Miller's":"Chapter 64–65","Barash":"Chapter 44–45"}
+  },
+  "TIVA": {
+    emoji:"💧",
+    concepts:[
+      "TIVA: total IV anesthesia using propofol ± opioid ± adjuvants without volatile agents",
+      "Target-controlled infusion (TCI): pharmacokinetic model drives pump to achieve target plasma/effect-site concentration",
+      "Propofol-remifentanil TIVA: most common combination; synergistic; allows rapid titration",
+      "BIS monitoring: 40–60 target for general anesthesia; reduces PONV risk vs volatile agents",
+      "Awareness risk: higher in TIVA if pump fails or IV infiltrates — monitor carefully",
+      "Advantages: reduced PONV, better for neuromonitoring (MEPs), malignant hyperthermia-susceptible patients",
+      "Propofol infusion syndrome (PRIS): rare but fatal — occurs with high dose (>5mg/kg/hr) >48hr in ICU",
+    ],
+    keywords:["Propofol","Remifentanil","TCI","Schnider","Marsh","BIS","Entropy","PONV","PRIS","Effect-site","Ce","Cp","Ke0","Awareness","MH","Neuromonitoring"],
+    highyield:[
+      "Remifentanil t½ ~3min regardless of infusion duration — always plan post-op analgesia bridge",
+      "PRIS: metabolic acidosis + rhabdomyolysis + cardiac failure — stop propofol immediately",
+      "BIS <60 associated with reduced awareness; BIS <40 deep anesthesia with burst suppression",
+      "TIVA preferred when: MH susceptibility, neurosurgery with MEP monitoring, severe PONV history",
+    ],
+    refs:{"M&M":"Chapter 8","Miller's":"Chapter 30","Barash":"Chapter 20"}
+  }
+};
+
 const TUTOR_SYS=`You are Gasology, an expert anesthesiologist-educator. Teach residents, fellows, and students with clinical rigor, Socratic questioning, and evidence-based medicine. Reference ASA/AHA/ERAS guidelines. Use mnemonics and clinical pearls. End with a follow-up question. Be authoritative and concise.`;
 const BOARDS_SYS=`You are a stern ABA oral board examiner. Present ABA-format clinical scenarios. Challenge vague answers ("Tell me more", "What specifically?"). Add mid-scenario complications. Do NOT give answers. Score responses and give brief feedback after each case. In voice mode keep replies to 2-3 sentences.`;
 const SCORE_SYS=`You are an ABA oral board examiner scoring a candidate's performance. After their final response to a case, provide: 1) Overall score (1-10), 2) What they did well (2-3 points), 3) Critical gaps or errors (2-3 points), 4) One key learning point. Format as JSON: {"score":X,"strong":["..."],"gaps":["..."],"pearl":"..."}`;
@@ -231,9 +437,159 @@ const globalCSS=`
   ::-webkit-scrollbar{width:4px}::-webkit-scrollbar-thumb{background:#C4D4E8;border-radius:4px}
 `;
 
+// ── QUICK REVIEW MODE ──────────────────────────────────────────────────────
+function QuickReviewMode({onBack, onTestMe}){
+  const [activeTopic, setActiveTopic]=useState("Airway");
+  const [aiResponse, setAiResponse]=useState("");
+  const [aiLoading, setAiLoading]=useState(false);
+  const [expandedSection, setExpandedSection]=useState("concepts");
+  const d=REVIEW_DATA[activeTopic];
+
+  const askDeeper=async(question)=>{
+    setAiLoading(true);setAiResponse("");
+    try{
+      const res=await fetch("https://api.anthropic.com/v1/messages",{method:"POST",
+        headers:{"Content-Type":"application/json"},
+        body:JSON.stringify({model:"claude-sonnet-4-20250514",max_tokens:600,
+          system:"You are an expert anesthesiologist educator. Give a concise, high-yield clinical explanation. Reference Morgan & Mikhail, Miller's, and Barash where relevant. Use bullet points. Keep it under 200 words.",
+          messages:[{role:"user",content:`Topic: ${activeTopic}
+Question: ${question}`}]})});
+      const data=await res.json();
+      setAiResponse(data.content?.map(b=>b.text||"").join("")||"");
+    }catch(e){setAiResponse("Error loading response.");}
+    setAiLoading(false);
+  };
+
+  const tagColors=[TEAL,GOLD,"#a78bfa","#fb923c","#34d399","#60a5fa","#f472b6"];
+
+  return(
+    <div style={{height:"100vh",display:"flex",flexDirection:"column",background:NAVY,fontFamily:"Georgia,serif",overflow:"hidden"}}>
+      <style>{`@import url('https://fonts.googleapis.com/css2?family=Playfair+Display:wght@700&family=Source+Serif+4:wght@400;600&display=swap');`}</style>
+
+      {/* Header */}
+      <div style={{background:NAVY2,borderBottom:`1px solid rgba(255,255,255,0.08)`,padding:"12px 20px",display:"flex",alignItems:"center",gap:"12px",flexShrink:0}}>
+        <button onClick={onBack} style={{background:"transparent",border:`1px solid rgba(255,255,255,0.18)`,color:SLATE,borderRadius:"7px",padding:"5px 11px",cursor:"pointer",fontSize:"12px",fontFamily:"monospace"}}>← Back</button>
+        <div style={{flex:1,textAlign:"center"}}>
+          <span style={{fontFamily:"'Playfair Display',serif",fontSize:"18px",fontWeight:700,color:WHITE}}>📚 Quick Review</span>
+          <span style={{fontSize:"11px",color:SLATE,marginLeft:"8px",fontFamily:"monospace"}}>M&M · Miller's · Barash</span>
+        </div>
+        <button onClick={()=>onTestMe(activeTopic)} style={{background:`${TEAL}18`,border:`1px solid ${TEAL}`,color:TEAL,borderRadius:"7px",padding:"5px 14px",cursor:"pointer",fontSize:"12px",fontFamily:"monospace"}}>🎯 Test Me</button>
+      </div>
+
+      {/* Topic tabs */}
+      <div style={{background:NAVY2,borderBottom:`1px solid rgba(255,255,255,0.06)`,padding:"10px 16px",display:"flex",gap:"8px",overflowX:"auto",flexShrink:0}}>
+        {REVIEW_TOPICS.map(t=>(
+          <button key={t} onClick={()=>{setActiveTopic(t);setAiResponse("");setExpandedSection("concepts");}}
+            style={{background:activeTopic===t?TEAL:"rgba(255,255,255,0.04)",color:activeTopic===t?NAVY:SLATE,border:`1px solid ${activeTopic===t?TEAL:"rgba(255,255,255,0.1)"}`,borderRadius:"20px",padding:"5px 14px",cursor:"pointer",fontSize:"12px",fontFamily:"monospace",whiteSpace:"nowrap",fontWeight:activeTopic===t?700:400,transition:"all 0.2s"}}>
+            {REVIEW_DATA[t].emoji} {t}
+          </button>
+        ))}
+      </div>
+
+      {/* Content */}
+      <div style={{flex:1,overflowY:"auto",padding:"20px"}}>
+        <div style={{maxWidth:"720px",margin:"0 auto"}}>
+
+          {/* Topic header */}
+          <div style={{marginBottom:"20px"}}>
+            <div style={{display:"flex",alignItems:"center",gap:"12px",marginBottom:"8px"}}>
+              <span style={{fontSize:"32px"}}>{d.emoji}</span>
+              <h2 style={{fontFamily:"'Playfair Display',serif",fontSize:"26px",fontWeight:700,color:WHITE,margin:0}}>{activeTopic}</h2>
+            </div>
+            <div style={{display:"flex",gap:"8px",flexWrap:"wrap"}}>
+              {Object.entries(d.refs).map(([book,ch])=>(
+                <span key={book} style={{background:"rgba(255,255,255,0.06)",border:"1px solid rgba(255,255,255,0.1)",borderRadius:"6px",padding:"3px 10px",fontSize:"11px",color:SLATE2,fontFamily:"monospace"}}>{book}: {ch}</span>
+              ))}
+            </div>
+          </div>
+
+          {/* Section toggles */}
+          <div style={{display:"flex",gap:"8px",marginBottom:"16px",flexWrap:"wrap"}}>
+            {[["concepts","📋 Key Concepts"],["keywords","🏷 Keywords"],["highyield","⚡ High-Yield"]].map(([k,label])=>(
+              <button key={k} onClick={()=>setExpandedSection(expandedSection===k?null:k)}
+                style={{background:expandedSection===k?`${TEAL}18`:"rgba(255,255,255,0.04)",border:`1px solid ${expandedSection===k?TEAL:"rgba(255,255,255,0.1)"}`,color:expandedSection===k?TEAL:SLATE,borderRadius:"8px",padding:"6px 14px",cursor:"pointer",fontSize:"12px",fontFamily:"monospace",fontWeight:expandedSection===k?700:400}}>
+                {label}
+              </button>
+            ))}
+          </div>
+
+          {/* Key Concepts */}
+          {expandedSection==="concepts"&&(
+            <div style={{background:"rgba(255,255,255,0.03)",border:"1px solid rgba(255,255,255,0.08)",borderRadius:"14px",padding:"20px",marginBottom:"16px"}}>
+              <div style={{fontSize:"11px",color:TEAL,fontFamily:"monospace",letterSpacing:"1px",marginBottom:"14px"}}>KEY CONCEPTS</div>
+              {d.concepts.map((c,i)=>(
+                <div key={i} style={{display:"flex",gap:"10px",marginBottom:"12px",alignItems:"flex-start"}}>
+                  <span style={{color:TEAL,fontFamily:"monospace",fontSize:"12px",marginTop:"2px",flexShrink:0}}>→</span>
+                  <span style={{fontSize:"14px",color:SLATE2,lineHeight:1.6}}>{c}</span>
+                </div>
+              ))}
+            </div>
+          )}
+
+          {/* Keywords */}
+          {expandedSection==="keywords"&&(
+            <div style={{background:"rgba(255,255,255,0.03)",border:"1px solid rgba(255,255,255,0.08)",borderRadius:"14px",padding:"20px",marginBottom:"16px"}}>
+              <div style={{fontSize:"11px",color:TEAL,fontFamily:"monospace",letterSpacing:"1px",marginBottom:"14px"}}>KEYWORDS TO KNOW</div>
+              <div style={{display:"flex",flexWrap:"wrap",gap:"8px"}}>
+                {d.keywords.map((kw,i)=>(
+                  <button key={kw} onClick={()=>askDeeper(`Explain the clinical significance of "${kw}" in anesthesia for ${activeTopic}`)}
+                    style={{background:`${tagColors[i%tagColors.length]}15`,border:`1px solid ${tagColors[i%tagColors.length]}40`,color:tagColors[i%tagColors.length],borderRadius:"20px",padding:"5px 14px",cursor:"pointer",fontSize:"13px",fontFamily:"monospace",transition:"all 0.2s",fontWeight:500}}>
+                    {kw}
+                  </button>
+                ))}
+              </div>
+              <div style={{marginTop:"12px",fontSize:"11px",color:SLATE,fontFamily:"monospace"}}>💡 Tap any keyword for an AI explanation</div>
+            </div>
+          )}
+
+          {/* High Yield */}
+          {expandedSection==="highyield"&&(
+            <div style={{background:"rgba(255,255,255,0.03)",border:"1px solid rgba(255,255,255,0.08)",borderRadius:"14px",padding:"20px",marginBottom:"16px"}}>
+              <div style={{fontSize:"11px",color:GOLD,fontFamily:"monospace",letterSpacing:"1px",marginBottom:"14px"}}>⚡ HIGH-YIELD BOARD FACTS</div>
+              {d.highyield.map((f,i)=>(
+                <div key={i} style={{display:"flex",gap:"10px",marginBottom:"14px",alignItems:"flex-start",background:`${GOLD}08`,border:`1px solid ${GOLD}20`,borderRadius:"8px",padding:"10px 14px"}}>
+                  <span style={{color:GOLD,fontSize:"14px",flexShrink:0}}>★</span>
+                  <span style={{fontSize:"14px",color:WHITE,lineHeight:1.6,fontWeight:500}}>{f}</span>
+                </div>
+              ))}
+            </div>
+          )}
+
+          {/* AI Dive Deeper */}
+          <div style={{background:"rgba(255,255,255,0.03)",border:`1px solid rgba(0,201,177,0.2)`,borderRadius:"14px",padding:"20px",marginBottom:"20px"}}>
+            <div style={{fontSize:"11px",color:TEAL,fontFamily:"monospace",letterSpacing:"1px",marginBottom:"14px"}}>🤖 DIVE DEEPER — ASK AI</div>
+            <div style={{display:"flex",flexWrap:"wrap",gap:"8px",marginBottom:"12px"}}>
+              {[
+                `What are the key anesthetic concerns for ${activeTopic}?`,
+                `What are common board questions about ${activeTopic}?`,
+                `Compare ${activeTopic} management across M&M, Miller's, and Barash`,
+                `What are the most dangerous pitfalls in ${activeTopic}?`,
+              ].map(q=>(
+                <button key={q} onClick={()=>askDeeper(q)}
+                  style={{background:`${TEAL}10`,border:`1px solid ${TEAL}30`,color:TEAL,borderRadius:"8px",padding:"6px 12px",cursor:"pointer",fontSize:"12px",fontFamily:"monospace",textAlign:"left",lineHeight:1.4}}>
+                  {q}
+                </button>
+              ))}
+            </div>
+            {aiLoading&&<div style={{color:SLATE,fontSize:"13px",fontFamily:"monospace",padding:"8px 0"}}>
+              <span style={{marginRight:"8px"}}>⟳</span>Loading...
+            </div>}
+            {aiResponse&&(
+              <div style={{background:"rgba(255,255,255,0.04)",borderRadius:"10px",padding:"16px",fontSize:"14px",color:SLATE2,lineHeight:1.7,borderLeft:`3px solid ${TEAL}`}}
+                dangerouslySetInnerHTML={{__html:fmt(aiResponse)}}/>
+            )}
+          </div>
+
+        </div>
+      </div>
+    </div>
+  );
+}
+
+
 // ── MAIN APP ──────────────────────────────────────────────────────────────────
 export default function Gasology(){
-  const [screen,setScreen]=useState("home"); // home | chat | quiz | pharma
+  const [screen,setScreen]=useState("home"); // home | chat | quiz | pharma | review
   const [mode,setMode]=useState("tutor");
   const [level,setLevel]=useState("CA-2");
   const [topic,setTopic]=useState(null);
@@ -459,10 +815,11 @@ export default function Gasology(){
             </button>
           ))}
         </div>
-        <div style={{display:"grid",gridTemplateColumns:"repeat(2,1fr)",gap:"14px",marginBottom:"28px"}}>
+        <div style={{display:"grid",gridTemplateColumns:"repeat(3,1fr)",gap:"14px",marginBottom:"28px"}}>
           {[
             {icon:"🧪",label:"Quiz Mode",desc:"Test your knowledge — 8 questions",action:()=>setScreen("quiz")},
             {icon:"💊",label:"Drug Reference",desc:"Quick pharmacology lookup",action:()=>setScreen("pharma")},
+            {icon:"📚",label:"Quick Review",desc:"M&M · Miller's · Barash summaries",action:()=>setScreen("review")},
           ].map(m=>(
             <button key={m.label} className="mode-card" onClick={m.action} style={{background:"rgba(255,255,255,0.03)",border:"1px solid rgba(255,255,255,0.08)",borderRadius:"16px",padding:"20px",cursor:"pointer",textAlign:"left",transition:"all 0.25s"}}>
               <div style={{fontSize:"28px",marginBottom:"8px"}}>{m.icon}</div>
@@ -477,6 +834,7 @@ export default function Gasology(){
   );
 
   if(screen==="quiz") return <QuizMode level={level} onBack={()=>setScreen("home")}/>;
+  if(screen==="review") return <QuickReviewMode onBack={()=>setScreen("home")} onTestMe={(topic)=>{setMode("boards");enterMode("boards");setTopic(topic);}}/>;
   if(screen==="pharma") return <PharmaMode onBack={()=>setScreen("home")}/>;
 
   // ── CHAT ──
