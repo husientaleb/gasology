@@ -1,4 +1,5 @@
 import { useState } from "react";
+import { ResidencyDirectory, FellowshipDirectory } from "./Directory.jsx";
 import App from "./App.jsx";
 
 const NAVY="#08172e", NAVY2="#0f2240", NAVY3="#1a3460";
@@ -32,6 +33,8 @@ const globalCSS = `
 
 export default function Root() {
   const [showApp, setShowApp] = useState(false);
+  const [showResidency, setShowResidency] = useState(false);
+  const [showFellowship, setShowFellowship] = useState(false);
   const [email, setEmail] = useState("");
   const [submitted, setSubmitted] = useState(false);
 
@@ -44,6 +47,8 @@ export default function Root() {
   };
 
   if (showApp) return <App />;
+  if (showResidency) return <ResidencyDirectory onBack={()=>setShowResidency(false)}/>;
+  if (showFellowship) return <FellowshipDirectory onBack={()=>setShowFellowship(false)}/>;
 
   return (
     <>
@@ -57,6 +62,8 @@ export default function Root() {
         </div>
         <div style={{display:"flex",alignItems:"center",gap:32}}>
           <a href="#features" style={{color:SLATE2,fontSize:14,textDecoration:"none",fontWeight:500}}>Features</a>
+          <a onClick={()=>setShowResidency(true)} href="#" style={{color:SLATE2,fontSize:14,textDecoration:"none",fontWeight:500}}>Residency Programs</a>
+          <a onClick={()=>setShowFellowship(true)} href="#" style={{color:SLATE2,fontSize:14,textDecoration:"none",fontWeight:500}}>Fellowships</a>
           <a href="#how" style={{color:SLATE2,fontSize:14,textDecoration:"none",fontWeight:500}}>How It Works</a>
           <a href="#pricing" style={{color:SLATE2,fontSize:14,textDecoration:"none",fontWeight:500}}>Pricing</a>
           <button onClick={handleTryFree} style={{background:`linear-gradient(135deg,${TEAL},${TEAL2})`,color:NAVY,padding:"9px 22px",borderRadius:8,border:"none",fontWeight:700,fontSize:14,cursor:"pointer"}}>Try Free →</button>
@@ -201,6 +208,28 @@ export default function Root() {
           </div>
         </div>
         <p style={{marginTop:24,fontSize:13,color:SLATE,fontFamily:"'DM Mono',monospace"}}>Residency program pricing available · Contact for institutional licensing</p>
+      </section>
+
+      {/* DIRECTORY CARDS */}
+      <section style={{padding:"0 24px 80px",maxWidth:900,margin:"0 auto",display:"grid",gridTemplateColumns:"repeat(auto-fit,minmax(300px,1fr))",gap:24}}>
+        <div style={{background:"rgba(255,255,255,0.03)",border:"1px solid rgba(255,255,255,0.08)",borderRadius:20,padding:"32px",cursor:"pointer",transition:"all 0.3s"}}
+          onClick={()=>setShowResidency(true)}
+          onMouseEnter={e=>{e.currentTarget.style.borderColor="rgba(0,201,177,0.4)";e.currentTarget.style.transform="translateY(-4px)"}}
+          onMouseLeave={e=>{e.currentTarget.style.borderColor="rgba(255,255,255,0.08)";e.currentTarget.style.transform="translateY(0)"}}>
+          <div style={{fontSize:40,marginBottom:16}}>🏥</div>
+          <div style={{fontFamily:"'Playfair Display',serif",fontSize:22,fontWeight:700,color:WHITE,marginBottom:8}}>Residency Directory</div>
+          <div style={{fontSize:14,color:SLATE2,lineHeight:1.7,marginBottom:20}}>Browse all {80}+ ACGME-accredited anesthesia residency programs. Filter by state, find program directors, and send a pitch email for Gasology in one click.</div>
+          <div style={{color:TEAL,fontSize:13,fontFamily:"'DM Mono',monospace",fontWeight:700}}>Browse Programs →</div>
+        </div>
+        <div style={{background:"rgba(255,255,255,0.03)",border:"1px solid rgba(255,255,255,0.08)",borderRadius:20,padding:"32px",cursor:"pointer",transition:"all 0.3s"}}
+          onClick={()=>setShowFellowship(true)}
+          onMouseEnter={e=>{e.currentTarget.style.borderColor="rgba(240,188,58,0.4)";e.currentTarget.style.transform="translateY(-4px)"}}
+          onMouseLeave={e=>{e.currentTarget.style.borderColor="rgba(255,255,255,0.08)";e.currentTarget.style.transform="translateY(0)"}}>
+          <div style={{fontSize:40,marginBottom:16}}>🎓</div>
+          <div style={{fontFamily:"'Playfair Display',serif",fontSize:22,fontWeight:700,color:WHITE,marginBottom:8}}>Fellowship Directory</div>
+          <div style={{fontSize:14,color:SLATE2,lineHeight:1.7,marginBottom:20}}>Browse anesthesia fellowships across 8 specialties — Regional, Cardiac, Pain, Neuro, Pediatric, Critical Care, OB, and more. With contact info and direct pitch tool.</div>
+          <div style={{color:GOLD,fontSize:13,fontFamily:"'DM Mono',monospace",fontWeight:700}}>Browse Fellowships →</div>
+        </div>
       </section>
 
       {/* FINAL CTA */}
