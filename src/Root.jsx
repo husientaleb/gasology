@@ -1,6 +1,7 @@
 import { useState } from "react";
 import { ResidencyDirectory, FellowshipDirectory } from "./Directory.jsx";
 import ConferencesPage from "./Conferences.jsx";
+import JournalsPage from "./Journals.jsx";
 import App from "./App.jsx";
 
 const NAVY  = "#08172e";
@@ -37,6 +38,7 @@ export default function Root() {
   const [showResidency,   setShowResidency]   = useState(false);
   const [showFellowship,  setShowFellowship]  = useState(false);
   const [showConferences, setShowConferences] = useState(false);
+  const [showJournals,    setShowJournals]    = useState(false);
   const [email,           setEmail]           = useState("");
   const [submitted,       setSubmitted]       = useState(false);
 
@@ -44,6 +46,7 @@ export default function Root() {
   if (showResidency)   return <ResidencyDirectory   onBack={() => setShowResidency(false)} />;
   if (showFellowship)  return <FellowshipDirectory  onBack={() => setShowFellowship(false)} />;
   if (showConferences) return <ConferencesPage      onBack={() => setShowConferences(false)} />;
+  if (showJournals)    return <JournalsPage          onBack={() => setShowJournals(false)} />;
 
   const handleSubmit = e => {
     e.preventDefault();
@@ -80,6 +83,11 @@ export default function Root() {
           <button className="nav-btn" onClick={()=>setShowConferences(true)}
             style={{background:"rgba(167,139,250,0.12)",border:"1px solid rgba(167,139,250,0.35)",color:PURPLE,fontSize:14,fontWeight:700,cursor:"pointer",padding:"7px 18px",borderRadius:9,fontFamily:"'DM Sans',sans-serif",letterSpacing:"-0.1px"}}>
             🗓️ Conferences 2026
+          </button>
+
+          <button className="nav-btn" onClick={()=>setShowJournals(true)}
+            style={{background:"rgba(46,212,122,0.12)",border:"1px solid rgba(46,212,122,0.35)",color:"#2ed47a",fontSize:14,fontWeight:700,cursor:"pointer",padding:"7px 18px",borderRadius:9,fontFamily:"'DM Sans',sans-serif",letterSpacing:"-0.1px"}}>
+            📰 Journals
           </button>
 
           <button className="nav-btn" onClick={()=>document.getElementById("pricing")?.scrollIntoView({behavior:"smooth"})}
@@ -208,6 +216,21 @@ export default function Root() {
               <div style={{color:PURPLE,fontSize:16,fontFamily:"'DM Mono',monospace",fontWeight:700}}>View Calendar →</div>
             </div>
 
+
+            {/* Journals card */}
+            <div className="res-card" onClick={() => setShowJournals(true)}
+              style={{background:"linear-gradient(135deg,rgba(46,212,122,0.1),rgba(46,212,122,0.03))",border:"2px solid rgba(46,212,122,0.35)",borderRadius:26,padding:"38px 32px",position:"relative",overflow:"hidden"}}>
+              <div style={{position:"absolute",top:-24,right:-16,fontSize:110,opacity:0.07,pointerEvents:"none",lineHeight:1}}>📰</div>
+              <div style={{fontSize:48,marginBottom:20}}>📰</div>
+              <div style={{fontFamily:"'Playfair Display',serif",fontSize:28,fontWeight:800,color:WHITE,marginBottom:12,lineHeight:1.15}}>Journals & Articles</div>
+              <div style={{fontSize:15,color:SLATE2,lineHeight:1.72,marginBottom:24}}>AI-curated high-yield articles from the top 4 anesthesia journals. Board relevance summaries + ask AI about any paper.</div>
+              <div style={{display:"flex",gap:7,flexWrap:"wrap",marginBottom:26}}>
+                {["Anesthesiology","A&A","BJA","RAPM"].map(t=>(
+                  <span key={t} style={{background:"rgba(46,212,122,0.12)",border:"1px solid rgba(46,212,122,0.28)",color:GREEN,fontSize:11,fontFamily:"monospace",padding:"4px 11px",borderRadius:20,fontWeight:600}}>{t}</span>
+                ))}
+              </div>
+              <div style={{color:GREEN,fontSize:16,fontFamily:"'DM Mono',monospace",fontWeight:700}}>Browse Journals →</div>
+            </div>
           </div>
         </div>
       </section>
@@ -299,6 +322,7 @@ export default function Root() {
           <button onClick={() => setShowResidency(true)}   style={{background:"none",border:"none",color:SLATE,cursor:"pointer",fontSize:13,fontFamily:"'DM Sans',sans-serif"}}>Residency Programs</button>
           <button onClick={() => setShowFellowship(true)}  style={{background:"none",border:"none",color:SLATE,cursor:"pointer",fontSize:13,fontFamily:"'DM Sans',sans-serif"}}>Fellowships</button>
           <button onClick={() => setShowConferences(true)} style={{background:"none",border:"none",color:SLATE,cursor:"pointer",fontSize:13,fontFamily:"'DM Sans',sans-serif"}}>Conferences 2026</button>
+          <button onClick={() => setShowJournals(true)}    style={{background:"none",border:"none",color:SLATE,cursor:"pointer",fontSize:13,fontFamily:"'DM Sans',sans-serif"}}>Journals</button>
         </div>
         <div style={{fontSize:12,color:SLATE,fontFamily:"monospace"}}>© 2026 Gasology · Educational use only</div>
       </footer>
