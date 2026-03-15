@@ -125,15 +125,11 @@ export default function JournalsPage({ onBack }) {
         })
       });
 
-      if (!res.ok) {
-        const errText = await res.text();
-        throw new Error(`API error ${res.status}: ${errText.slice(0, 200)}`);
-      }
-
       const data = await res.json();
 
-      if (data.error) {
-        throw new Error(data.error.message || JSON.stringify(data.error));
+      if (!res.ok || data.error) {
+        const msg = data.error?.message || data.error?.type || `HTTP ${res.status}`;
+        throw new Error(msg);
       }
 
       const raw = data.content?.map(b => b.text || "").join("") || "";
