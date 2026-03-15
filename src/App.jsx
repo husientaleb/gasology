@@ -817,18 +817,19 @@ export default function Gasology(){
             </button>
           ))}
         </div>
-        <div style={{display:"grid",gridTemplateColumns:"repeat(2,1fr)",gap:"14px",marginBottom:"28px"}}>
+        <div style={{display:"grid",gridTemplateColumns:"repeat(2,1fr)",gap:"12px",marginBottom:"28px"}}>
           {[
-            {icon:"🧪",label:"Quiz Mode",desc:"Test your knowledge — 8 questions",action:()=>setScreen("quiz")},
+            {icon:"🧪",label:"Quiz Mode",desc:"8 board-style questions",action:()=>setScreen("quiz")},
             {icon:"💊",label:"Drug Reference",desc:"Quick pharmacology lookup",action:()=>setScreen("pharma")},
-            {icon:"📚",label:"Quick Review",desc:"M&M · Miller's · Barash summaries",action:()=>setScreen("review")},
-            {icon:"🏆",label:"Case of the Day",desc:"Daily gamified clinical case",action:()=>setScreen("case"),badge:"🔥 New Daily"},
-            {icon:"📡",label:"Weekly Digest",desc:"Journal updates for busy physicians",action:()=>setScreen("digest")},
+            {icon:"📚",label:"Quick Review",desc:"M&M · Miller's · Barash",action:()=>setScreen("review")},
+            {icon:"🏆",label:"Case of the Day",desc:"Daily gamified case",action:()=>setScreen("case"),badge:"🔥 Daily"},
+            {icon:"📡",label:"Weekly Digest",desc:"Journal updates digest",action:()=>setScreen("digest")},
           ].map(m=>(
-            <button key={m.label} className="mode-card" onClick={m.action} style={{background:"rgba(255,255,255,0.03)",border:"1px solid rgba(255,255,255,0.08)",borderRadius:"16px",padding:"20px",cursor:"pointer",textAlign:"left",transition:"all 0.25s"}}>
-              <div style={{fontSize:"28px",marginBottom:"8px"}}>{m.icon}</div>
-              <div style={{fontFamily:"'Playfair Display',serif",fontSize:"16px",fontWeight:700,color:WHITE,marginBottom:"4px"}}>{m.label}</div>
-              <div style={{color:SLATE,fontSize:"13px"}}>{m.desc}</div>
+            <button key={m.label} className="mode-card" onClick={m.action} style={{background:"rgba(255,255,255,0.03)",border:"1px solid rgba(255,255,255,0.08)",borderRadius:"14px",padding:"16px",cursor:"pointer",textAlign:"left",transition:"all 0.25s"}}>
+              <div style={{fontSize:"24px",marginBottom:"6px"}}>{m.icon}</div>
+              <div style={{fontFamily:"'Playfair Display',serif",fontSize:"14px",fontWeight:700,color:WHITE,marginBottom:"3px"}}>{m.label}</div>
+              <div style={{color:SLATE,fontSize:"11px"}}>{m.desc}</div>
+              {m.badge&&<div style={{display:"inline-block",background:`${TEAL}18`,border:`1px solid ${TEAL}40`,color:TEAL,fontSize:"10px",borderRadius:"4px",padding:"1px 6px",marginTop:"4px",fontFamily:"monospace"}}>{m.badge}</div>}
             </button>
           ))}
         </div>
