@@ -3,6 +3,7 @@ import { ResidencyDirectory, FellowshipDirectory } from "./Directory.jsx";
 import ConferencesPage from "./Conferences.jsx";
 import JournalsPage from "./Journals.jsx";
 import CaseOfTheDay from "./CaseOfTheDay.jsx";
+import WeeklyDigest from "./WeeklyDigest.jsx";
 import App from "./App.jsx";
 
 const NAVY  = "#08172e";
@@ -58,6 +59,7 @@ export default function Root() {
   const [showConferences, setShowConferences] = useState(false);
   const [showJournals,    setShowJournals]    = useState(false);
   const [showCaseOfDay,   setShowCaseOfDay]   = useState(false);
+  const [showDigest,      setShowDigest]      = useState(false);
   const [mobileMenuOpen,  setMobileMenuOpen]  = useState(false);
   const [email,           setEmail]           = useState("");
   const [submitted,       setSubmitted]       = useState(false);
@@ -68,6 +70,7 @@ export default function Root() {
   if (showConferences) return <ConferencesPage      onBack={() => setShowConferences(false)} />;
   if (showJournals)    return <JournalsPage          onBack={() => setShowJournals(false)} />;
   if (showCaseOfDay)   return <CaseOfTheDay           onBack={() => setShowCaseOfDay(false)} />;
+  if (showDigest)      return <WeeklyDigest            onBack={() => setShowDigest(false)} />;
 
   const handleSubmit = e => {
     e.preventDefault();
@@ -225,6 +228,24 @@ export default function Root() {
             </div>
 
 
+
+            {/* Weekly Digest card */}
+            <div className="res-card" onClick={() => setShowDigest(true)}
+              style={{background:"linear-gradient(135deg,rgba(143,179,212,0.1),rgba(143,179,212,0.03))",border:"2px solid rgba(143,179,212,0.3)",borderRadius:26,padding:"38px 32px",position:"relative",overflow:"hidden"}}>
+              <div style={{position:"absolute",top:-24,right:-16,fontSize:110,opacity:0.07,pointerEvents:"none",lineHeight:1}}>📡</div>
+              <div style={{fontSize:48,marginBottom:20}}>📡</div>
+              <div style={{fontFamily:"'Playfair Display',serif",fontSize:28,fontWeight:800,color:WHITE,marginBottom:12,lineHeight:1.15}}>Weekly Digest</div>
+              <div style={{fontSize:15,color:SLATE2,lineHeight:1.72,marginBottom:24}}>Every week, AI scans all 4 major anesthesia journals and delivers bite-sized summaries for busy physicians. TL;DR, practice implications, bottom lines.</div>
+              <div style={{display:"flex",gap:"20px",marginBottom:26}}>
+                {[["4","Journals"],["8+","Articles"],["Weekly","Refresh"]].map(([n,l])=>(
+                  <div key={l}>
+                    <div style={{fontFamily:"'Playfair Display',serif",fontSize:28,fontWeight:800,color:SLATE2}}>{n}</div>
+                    <div style={{fontSize:11,color:SLATE,fontFamily:"monospace",marginTop:2}}>{l}</div>
+                  </div>
+                ))}
+              </div>
+              <div style={{color:SLATE2,fontSize:16,fontFamily:"'DM Mono',monospace",fontWeight:700}}>Read This Week's Digest →</div>
+            </div>
             {/* Case of the Day card */}
             <div className="res-card" onClick={() => setShowCaseOfDay(true)}
               style={{background:"linear-gradient(135deg,rgba(224,85,85,0.1),rgba(224,85,85,0.03))",border:"2px solid rgba(224,85,85,0.38)",borderRadius:26,padding:"38px 32px",position:"relative",overflow:"hidden"}}>
@@ -367,6 +388,7 @@ export default function Root() {
           <button onClick={() => setShowFellowship(true)}  style={{background:"none",border:"none",color:SLATE,cursor:"pointer",fontSize:13,fontFamily:"'DM Sans',sans-serif"}}>Fellowships</button>
           <button onClick={() => setShowConferences(true)} style={{background:"none",border:"none",color:SLATE,cursor:"pointer",fontSize:13,fontFamily:"'DM Sans',sans-serif"}}>Conferences 2026</button>
           <button onClick={() => setShowJournals(true)}    style={{background:"none",border:"none",color:SLATE,cursor:"pointer",fontSize:13,fontFamily:"'DM Sans',sans-serif"}}>Journals</button>
+          <button onClick={() => setShowDigest(true)}     style={{background:"none",border:"none",color:SLATE,cursor:"pointer",fontSize:13,fontFamily:"'DM Sans',sans-serif"}}>Weekly Digest</button>
         </div>
         <div style={{fontSize:12,color:SLATE,fontFamily:"monospace"}}>© 2026 Gasology · Educational use only</div>
       </footer>

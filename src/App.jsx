@@ -1,5 +1,6 @@
 import { useState, useRef, useEffect } from "react";
 import CaseOfTheDay from "./CaseOfTheDay.jsx";
+import WeeklyDigest from "./WeeklyDigest.jsx";
 
 // ── CONSTANTS ────────────────────────────────────────────────────────────────
 const NAVY="#0B1F3A",NAVY2="#142952",NAVY3="#1e3a6e",TEAL="#00C9B1",TEAL2="#009E8C",
@@ -590,7 +591,7 @@ Question: ${question}`}]})});
 
 // ── MAIN APP ──────────────────────────────────────────────────────────────────
 export default function Gasology(){
-  const [screen,setScreen]=useState("home"); // home | chat | quiz | pharma | review | case
+  const [screen,setScreen]=useState("home"); // home | chat | quiz | pharma | review | case | digest
   const [mode,setMode]=useState("tutor");
   const [level,setLevel]=useState("CA-2");
   const [topic,setTopic]=useState(null);
@@ -822,6 +823,7 @@ export default function Gasology(){
             {icon:"💊",label:"Drug Reference",desc:"Quick pharmacology lookup",action:()=>setScreen("pharma")},
             {icon:"📚",label:"Quick Review",desc:"M&M · Miller's · Barash summaries",action:()=>setScreen("review")},
             {icon:"🏆",label:"Case of the Day",desc:"Daily gamified clinical case",action:()=>setScreen("case"),badge:"🔥 New Daily"},
+            {icon:"📡",label:"Weekly Digest",desc:"Journal updates for busy physicians",action:()=>setScreen("digest")},
           ].map(m=>(
             <button key={m.label} className="mode-card" onClick={m.action} style={{background:"rgba(255,255,255,0.03)",border:"1px solid rgba(255,255,255,0.08)",borderRadius:"16px",padding:"20px",cursor:"pointer",textAlign:"left",transition:"all 0.25s"}}>
               <div style={{fontSize:"28px",marginBottom:"8px"}}>{m.icon}</div>
@@ -839,6 +841,7 @@ export default function Gasology(){
   if(screen==="review") return <QuickReviewMode onBack={()=>setScreen("home")} onTestMe={(topic)=>{setMode("boards");enterMode("boards");setTopic(topic);}}/>;
   if(screen==="pharma") return <PharmaMode onBack={()=>setScreen("home")}/>;
   if(screen==="case") return <CaseOfTheDay onBack={()=>setScreen("home")}/>;
+  if(screen==="digest") return <WeeklyDigest onBack={()=>setScreen("home")}/>;
 
   // ── CHAT ──
   const isVoice=voiceOn&&mode==="boards";
