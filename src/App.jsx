@@ -1,4 +1,5 @@
 import { useState, useRef, useEffect } from "react";
+import CaseOfTheDay from "./CaseOfTheDay.jsx";
 
 // ── CONSTANTS ────────────────────────────────────────────────────────────────
 const NAVY="#0B1F3A",NAVY2="#142952",NAVY3="#1e3a6e",TEAL="#00C9B1",TEAL2="#009E8C",
@@ -448,7 +449,7 @@ function QuickReviewMode({onBack, onTestMe}){
   const askDeeper=async(question)=>{
     setAiLoading(true);setAiResponse("");
     try{
-      const res=await fetch("https://api.anthropic.com/v1/messages",{method:"POST",
+      const res=await fetch("/api/claude",{method:"POST",
         headers:{"Content-Type":"application/json"},
         body:JSON.stringify({model:"claude-sonnet-4-20250514",max_tokens:600,
           system:"You are an expert anesthesiologist educator. Give a concise, high-yield clinical explanation. Reference Morgan & Mikhail, Miller's, and Barash where relevant. Use bullet points. Keep it under 200 words.",
@@ -589,7 +590,7 @@ Question: ${question}`}]})});
 
 // ── MAIN APP ──────────────────────────────────────────────────────────────────
 export default function Gasology(){
-  const [screen,setScreen]=useState("home"); // home | chat | quiz | pharma | review
+  const [screen,setScreen]=useState("home"); // home | chat | quiz | pharma | review | case
   const [mode,setMode]=useState("tutor");
   const [level,setLevel]=useState("CA-2");
   const [topic,setTopic]=useState(null);
@@ -727,7 +728,7 @@ export default function Gasology(){
 
   const requestScore=async(history)=>{
     try{
-      const res=await fetch("https://api.anthropic.com/v1/messages",{method:"POST",headers:{"Content-Type":"application/json"},
+      const res=await fetch("/api/claude",{method:"POST",headers:{"Content-Type":"application/json"},
         body:JSON.stringify({model:"claude-sonnet-4-20250514",max_tokens:600,system:SCORE_SYS,
           messages:[{role:"user",content:"Score this oral board exchange:\n\n"+history.map(m=>`${m.role.toUpperCase()}: ${m.content}`).join("\n\n")}]})});
       const d=await res.json();
@@ -762,7 +763,7 @@ export default function Gasology(){
       +(topic?`\n\nFocus topic: ${topic}`:"")
       +(isVoice?"\n\nVOICE MODE: 2-3 sentences max, no markdown.":"");
     try{
-      const res=await fetch("https://api.anthropic.com/v1/messages",{method:"POST",headers:{"Content-Type":"application/json"},
+      const res=await fetch("/api/claude",{method:"POST",headers:{"Content-Type":"application/json"},
         body:JSON.stringify({model:"claude-sonnet-4-20250514",max_tokens:900,system:sys,
           messages:history.map(m=>({role:m.role,content:m.content}))})});
       const d=await res.json();
@@ -815,11 +816,12 @@ export default function Gasology(){
             </button>
           ))}
         </div>
-        <div style={{display:"grid",gridTemplateColumns:"repeat(3,1fr)",gap:"14px",marginBottom:"28px"}}>
+        <div style={{display:"grid",gridTemplateColumns:"repeat(2,1fr)",gap:"14px",marginBottom:"28px"}}>
           {[
             {icon:"🧪",label:"Quiz Mode",desc:"Test your knowledge — 8 questions",action:()=>setScreen("quiz")},
             {icon:"💊",label:"Drug Reference",desc:"Quick pharmacology lookup",action:()=>setScreen("pharma")},
             {icon:"📚",label:"Quick Review",desc:"M&M · Miller's · Barash summaries",action:()=>setScreen("review")},
+            {icon:"🏆",label:"Case of the Day",desc:"Daily gamified clinical case",action:()=>setScreen("case"),badge:"🔥 New Daily"},
           ].map(m=>(
             <button key={m.label} className="mode-card" onClick={m.action} style={{background:"rgba(255,255,255,0.03)",border:"1px solid rgba(255,255,255,0.08)",borderRadius:"16px",padding:"20px",cursor:"pointer",textAlign:"left",transition:"all 0.25s"}}>
               <div style={{fontSize:"28px",marginBottom:"8px"}}>{m.icon}</div>
@@ -836,6 +838,7 @@ export default function Gasology(){
   if(screen==="quiz") return <QuizMode level={level} onBack={()=>setScreen("home")}/>;
   if(screen==="review") return <QuickReviewMode onBack={()=>setScreen("home")} onTestMe={(topic)=>{setMode("boards");enterMode("boards");setTopic(topic);}}/>;
   if(screen==="pharma") return <PharmaMode onBack={()=>setScreen("home")}/>;
+  if(screen==="case") return <CaseOfTheDay onBack={()=>setScreen("home")}/>;
 
   // ── CHAT ──
   const isVoice=voiceOn&&mode==="boards";

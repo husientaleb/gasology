@@ -107,29 +107,52 @@ export default function JournalsPage({ onBack }) {
   const loadArticles = async (journal) => {
     if (articles[journal.id]) { setActiveJournal(journal.id); return; }
     setLoading(l => ({ ...l, [journal.id]: true }));
+    setErrors(e => ({ ...e, [journal.id]: null }));
     setActiveJournal(journal.id);
     try {
       const prompt = SYSTEM_PROMPT
         .replace("{JOURNAL}", `${journal.name} (${journal.abbrev})`)
         .replace("{SEARCH_TERM}", journal.name.replace(/ /g, "+"));
 
-      const res = await fetch("https://api.anthropic.com/v1/messages", {
+      const res = await fetch("/api/claude", {
         method: "POST",
         headers: { "Content-Type": "application/json" },
         body: JSON.stringify({
           model: "claude-sonnet-4-20250514",
-          max_tokens: 1800,
-          system: "You are a senior anesthesiologist. Return only valid JSON arrays, no markdown fences, no extra text.",
+          max_tokens: 2000,
+          system: "You are a senior anesthesiologist and journal editor. Return ONLY a valid JSON array. No markdown code fences. No text before or after the JSON array. Start your response with [ and end with ].",
           messages: [{ role: "user", content: prompt }]
         })
       });
+
+      if (!res.ok) {
+        const errText = await res.text();
+        throw new Error(`API error ${res.status}: ${errText.slice(0, 200)}`);
+      }
+
       const data = await res.json();
+
+      if (data.error) {
+        throw new Error(data.error.message || JSON.stringify(data.error));
+      }
+
       const raw = data.content?.map(b => b.text || "").join("") || "";
-      const clean = raw.replace(/```json|```/g, "").trim();
-      const parsed = JSON.parse(clean);
+      if (!raw) throw new Error("Empty response from API");
+
+      // Extract JSON array — find first [ and last ]
+      const start = raw.indexOf("[");
+      const end = raw.lastIndexOf("]");
+      if (start === -1 || end === -1) throw new Error("No JSON array found in response");
+
+      const jsonStr = raw.slice(start, end + 1);
+      const parsed = JSON.parse(jsonStr);
+
+      if (!Array.isArray(parsed) || parsed.length === 0) throw new Error("Invalid article array");
+
       setArticles(a => ({ ...a, [journal.id]: parsed }));
     } catch (e) {
-      setErrors(err => ({ ...err, [journal.id]: "Failed to load articles. Try again." }));
+      console.error("Journals load error:", e);
+      setErrors(err => ({ ...err, [journal.id]: `Failed to load: ${e.message}. Check your API proxy and try again.` }));
     }
     setLoading(l => ({ ...l, [journal.id]: false }));
   };
@@ -143,7 +166,7 @@ export default function JournalsPage({ onBack }) {
   const submitAsk = async (question) => {
     setAskLoading(true); setAskAnswer("");
     try {
-      const res = await fetch("https://api.anthropic.com/v1/messages", {
+      const res = await fetch("/api/claude", {
         method: "POST",
         headers: { "Content-Type": "application/json" },
         body: JSON.stringify({
@@ -153,9 +176,11 @@ export default function JournalsPage({ onBack }) {
           messages: [{ role: "user", content: `Article: "${askArticle.article.title}" (${askArticle.journal.name}, ${askArticle.article.year})\n\nSummary: ${askArticle.article.summary}\n\nQuestion: ${question}` }]
         })
       });
+      if (!res.ok) throw new Error(`HTTP ${res.status}`);
       const data = await res.json();
-      setAskAnswer(data.content?.map(b => b.text || "").join("") || "");
-    } catch (e) { setAskAnswer("Error. Please try again."); }
+      if (data.error) throw new Error(data.error.message || "API error");
+      setAskAnswer(data.content?.map(b => b.text || "").join("") || "No response.");
+    } catch (e) { setAskAnswer(`Error: ${e.message}. Please try again.`); }
     setAskLoading(false);
   };
 

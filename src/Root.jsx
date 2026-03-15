@@ -2,6 +2,7 @@ import { useState } from "react";
 import { ResidencyDirectory, FellowshipDirectory } from "./Directory.jsx";
 import ConferencesPage from "./Conferences.jsx";
 import JournalsPage from "./Journals.jsx";
+import CaseOfTheDay from "./CaseOfTheDay.jsx";
 import App from "./App.jsx";
 
 const NAVY  = "#08172e";
@@ -31,6 +32,23 @@ const CSS = `
   .feat-card { transition: all 0.22s; }
   .feat-card:hover { border-color: rgba(0,201,177,0.35) !important; transform: translateY(-3px); }
   ::-webkit-scrollbar{width:4px} ::-webkit-scrollbar-thumb{background:#2d4a6b;border-radius:4px}
+
+  /* ── MOBILE NAV ── */
+  .desktop-nav { display: flex; }
+  .mobile-nav-toggle { display: none !important; }
+  .mobile-nav-menu { display: none; }
+
+  @media (max-width: 768px) {
+    .desktop-nav { display: none !important; }
+    .mobile-nav-toggle { display: flex !important; }
+    .mobile-nav-menu.open { display: flex !important; flex-direction: column; position: fixed; top: 66px; left: 0; right: 0; background: rgba(8,23,46,0.98); backdrop-filter: blur(20px); border-bottom: 1px solid rgba(255,255,255,0.1); padding: 16px; gap: 10px; z-index: 199; }
+    .hero-form { flex-direction: column !important; }
+    .resource-grid { grid-template-columns: 1fr !important; }
+    .feat-grid { grid-template-columns: 1fr !important; }
+    .pricing-grid { grid-template-columns: 1fr !important; }
+    .footer-inner { flex-direction: column !important; align-items: center !important; text-align: center !important; gap: 20px !important; }
+    .footer-links { justify-content: center !important; flex-wrap: wrap !important; }
+  }
 `;
 
 export default function Root() {
@@ -39,6 +57,8 @@ export default function Root() {
   const [showFellowship,  setShowFellowship]  = useState(false);
   const [showConferences, setShowConferences] = useState(false);
   const [showJournals,    setShowJournals]    = useState(false);
+  const [showCaseOfDay,   setShowCaseOfDay]   = useState(false);
+  const [mobileMenuOpen,  setMobileMenuOpen]  = useState(false);
   const [email,           setEmail]           = useState("");
   const [submitted,       setSubmitted]       = useState(false);
 
@@ -47,6 +67,7 @@ export default function Root() {
   if (showFellowship)  return <FellowshipDirectory  onBack={() => setShowFellowship(false)} />;
   if (showConferences) return <ConferencesPage      onBack={() => setShowConferences(false)} />;
   if (showJournals)    return <JournalsPage          onBack={() => setShowJournals(false)} />;
+  if (showCaseOfDay)   return <CaseOfTheDay           onBack={() => setShowCaseOfDay(false)} />;
 
   const handleSubmit = e => {
     e.preventDefault();
@@ -90,6 +111,11 @@ export default function Root() {
             📰 Journals
           </button>
 
+          <button className="nav-btn" onClick={()=>setShowCaseOfDay(true)}
+            style={{background:"rgba(224,85,85,0.14)",border:"1px solid rgba(224,85,85,0.38)",color:"#e05555",fontSize:14,fontWeight:700,cursor:"pointer",padding:"7px 18px",borderRadius:9,fontFamily:"'DM Sans',sans-serif",letterSpacing:"-0.1px"}}>
+            🏆 Case of the Day
+          </button>
+
           <button className="nav-btn" onClick={()=>document.getElementById("pricing")?.scrollIntoView({behavior:"smooth"})}
             style={{background:"transparent",border:"none",color:SLATE2,fontSize:14,fontWeight:500,cursor:"pointer",padding:"7px 14px",borderRadius:8,fontFamily:"'DM Sans',sans-serif"}}>Pricing</button>
         </div>
@@ -116,7 +142,7 @@ export default function Root() {
             The first AI anesthesia educator that thinks, talks, and examines like a real ABA oral board examiner. Built for CA-1s through Fellows.
           </p>
           {!submitted ? (
-            <form onSubmit={handleSubmit} style={{display:"flex",gap:12,maxWidth:490,margin:"0 auto 18px",animation:"fadeUp 0.5s 0.3s ease both"}}>
+            <form onSubmit={handleSubmit} className="hero-form" style={{display:"flex",gap:12,maxWidth:490,margin:"0 auto 18px",animation:"fadeUp 0.5s 0.3s ease both"}}>
               <input type="email" required placeholder="Enter your email address" value={email} onChange={e=>setEmail(e.target.value)}
                 style={{flex:1,padding:"14px 18px",borderRadius:10,border:"1px solid rgba(255,255,255,0.14)",background:"rgba(255,255,255,0.07)",color:WHITE,fontSize:15,fontFamily:"'DM Sans',sans-serif",outline:"none"}}/>
               <button type="submit"
@@ -148,7 +174,7 @@ export default function Root() {
             </p>
           </div>
 
-          <div style={{display:"grid",gridTemplateColumns:"repeat(auto-fit,minmax(280px,1fr))",gap:"22px"}}>
+          <div style={{className:"resource-grid",style:{display:"grid",gridTemplateColumns:"repeat(auto-fit,minmax(280px,1fr))",gap:"22px"}}>
 
             {/* AI Board Prep card */}
             <div className="res-card" onClick={() => setShowApp(true)}
@@ -198,6 +224,24 @@ export default function Root() {
               <div style={{color:GOLD,fontSize:16,fontFamily:"'DM Mono',monospace",fontWeight:700}}>Browse Fellowships →</div>
             </div>
 
+
+            {/* Case of the Day card */}
+            <div className="res-card" onClick={() => setShowCaseOfDay(true)}
+              style={{background:"linear-gradient(135deg,rgba(224,85,85,0.1),rgba(224,85,85,0.03))",border:"2px solid rgba(224,85,85,0.38)",borderRadius:26,padding:"38px 32px",position:"relative",overflow:"hidden"}}>
+              <div style={{position:"absolute",top:-24,right:-16,fontSize:110,opacity:0.07,pointerEvents:"none",lineHeight:1}}>🏆</div>
+              <div style={{fontSize:48,marginBottom:20}}>🏆</div>
+              <div style={{fontFamily:"'Playfair Display',serif",fontSize:28,fontWeight:800,color:WHITE,marginBottom:12,lineHeight:1.15}}>Case of the Day</div>
+              <div style={{fontSize:15,color:SLATE2,lineHeight:1.72,marginBottom:24}}>A new gamified clinical case every day. 5 timed questions, progressive difficulty, scoring, streaks, and clinical pearls after each answer.</div>
+              <div style={{display:"flex",gap:"20px",marginBottom:26}}>
+                {[["5","Questions"],["⏱️","Timed"],["🔥","Streaks"]].map(([n,l])=>(
+                  <div key={l}>
+                    <div style={{fontFamily:"'Playfair Display',serif",fontSize:28,fontWeight:800,color:RED}}>{n}</div>
+                    <div style={{fontSize:11,color:SLATE,fontFamily:"monospace",marginTop:2}}>{l}</div>
+                  </div>
+                ))}
+              </div>
+              <div style={{color:RED,fontSize:16,fontFamily:"'DM Mono',monospace",fontWeight:700}}>Play Today's Case →</div>
+            </div>
             {/* Conferences card */}
             <div className="res-card" onClick={() => setShowConferences(true)}
               style={{background:"linear-gradient(135deg,rgba(167,139,250,0.1),rgba(167,139,250,0.03))",border:"2px solid rgba(167,139,250,0.38)",borderRadius:26,padding:"38px 32px",position:"relative",overflow:"hidden"}}>
@@ -241,7 +285,7 @@ export default function Root() {
           <div style={{fontFamily:"'DM Mono',monospace",fontSize:12,color:TEAL,letterSpacing:2,textTransform:"uppercase",marginBottom:14}}>App Features</div>
           <h2 style={{fontFamily:"'Playfair Display',serif",fontSize:"clamp(34px,5vw,56px)",fontWeight:800,letterSpacing:"-1px",marginBottom:16,lineHeight:1.1}}>Study Smarter.<br/><span style={{fontStyle:"italic",color:TEAL}}>Pass Faster.</span></h2>
           <p style={{fontSize:18,color:SLATE2,marginBottom:52,fontWeight:300}}>Every tool you need. Nothing you don't.</p>
-          <div style={{display:"grid",gridTemplateColumns:"repeat(auto-fit,minmax(260px,1fr))",gap:20}}>
+          <div style={{display:"grid",gridTemplateColumns:"repeat(auto-fit,minmax(260px,1fr))",gap:20,className:"feat-grid"}}>
             {[
               {emoji:"🎙️",title:"Voice Oral Boards",desc:"Speak your answers. AI responds like a real ABA examiner. Mid-scenario complications. Scoring after every case.",color:TEAL},
               {emoji:"📚",title:"Quick Review",desc:"High-yield summaries from M&M, Miller's, and Barash — by system. Tap keywords for instant AI deep-dives.",color:PURPLE},
@@ -266,7 +310,7 @@ export default function Root() {
         <div style={{fontFamily:"'DM Mono',monospace",fontSize:12,color:TEAL,letterSpacing:2,textTransform:"uppercase",marginBottom:14}}>Pricing</div>
         <h2 style={{fontFamily:"'Playfair Display',serif",fontSize:"clamp(34px,5vw,56px)",fontWeight:800,letterSpacing:"-1px",marginBottom:16}}>Start free.<br/><span style={{fontStyle:"italic",color:TEAL}}>Upgrade when ready.</span></h2>
         <p style={{fontSize:18,color:SLATE2,marginBottom:52,fontWeight:300}}>No pressure. No credit card. Get hooked on the free tier first.</p>
-        <div style={{display:"grid",gridTemplateColumns:"repeat(auto-fit,minmax(280px,1fr))",gap:24,maxWidth:720,margin:"0 auto"}}>
+        <div style={{display:"grid",gridTemplateColumns:"repeat(auto-fit,minmax(280px,1fr))",gap:24,maxWidth:720,margin:"0 auto",className:"pricing-grid"}}>
           <div style={{background:"rgba(255,255,255,0.03)",border:"1px solid rgba(255,255,255,0.1)",borderRadius:22,padding:"36px 32px",textAlign:"left"}}>
             <div style={{fontFamily:"'DM Mono',monospace",fontSize:11,color:SLATE,letterSpacing:2,textTransform:"uppercase",marginBottom:12}}>Free</div>
             <div style={{fontFamily:"'Playfair Display',serif",fontSize:52,fontWeight:800,color:WHITE,lineHeight:1,marginBottom:6}}>$0<span style={{fontSize:18,color:SLATE}}>/mo</span></div>
@@ -313,7 +357,7 @@ export default function Root() {
       </div>
 
       {/* FOOTER */}
-      <footer style={{background:NAVY2,borderTop:"1px solid rgba(255,255,255,0.06)",padding:"36px 48px",display:"flex",justifyContent:"space-between",alignItems:"center",flexWrap:"wrap",gap:16}}>
+      <footer style={{background:NAVY2,borderTop:"1px solid rgba(255,255,255,0.06)",padding:"36px 24px",display:"flex",justifyContent:"space-between",alignItems:"center",flexWrap:"wrap",gap:16,className:"footer-inner"}}>
         <div style={{display:"flex",alignItems:"center",gap:10}}>
           <div style={{width:32,height:32,borderRadius:8,background:"linear-gradient(135deg,#00c9b1,#00a896)",display:"flex",alignItems:"center",justifyContent:"center",fontSize:16}}>💨</div>
           <span style={{fontFamily:"'Playfair Display',serif",fontSize:18,color:WHITE}}>Gasology</span>
