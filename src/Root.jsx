@@ -224,38 +224,7 @@ export default function Root(){
         </div>
       </section>
 
-      {/* PRICING */}
-      <section style={{padding:"80px 24px",textAlign:"center"}}>
-        <div style={{fontFamily:"'DM Mono',monospace",fontSize:12,color:TEAL,letterSpacing:2,textTransform:"uppercase",marginBottom:14}}>Pricing</div>
-        <h2 style={{fontFamily:"'Playfair Display',serif",fontSize:"clamp(30px,5vw,52px)",fontWeight:800,letterSpacing:"-1px",marginBottom:16}}>Start free.<br/><span style={{fontStyle:"italic",color:TEAL}}>Upgrade when ready.</span></h2>
-        <p style={{fontSize:17,color:SLATE2,marginBottom:48,fontWeight:300}}>No credit card. No pressure.</p>
-        <div className="pgrid" style={{display:"grid",gridTemplateColumns:"repeat(auto-fit,minmax(280px,1fr))",gap:24,maxWidth:720,margin:"0 auto"}}>
-          <div style={{background:"rgba(255,255,255,0.03)",border:"1px solid rgba(255,255,255,0.1)",borderRadius:22,padding:"36px 32px",textAlign:"left"}}>
-            <div style={{fontFamily:"'DM Mono',monospace",fontSize:11,color:SLATE,letterSpacing:2,textTransform:"uppercase",marginBottom:12}}>Free</div>
-            <div style={{fontFamily:"'Playfair Display',serif",fontSize:52,fontWeight:800,color:WHITE,lineHeight:1,marginBottom:6}}>$0<span style={{fontSize:18,color:SLATE}}>/mo</span></div>
-            <p style={{fontSize:14,color:SLATE2,marginBottom:24}}>Everything you need to start.</p>
-            <ul style={{listStyle:"none",marginBottom:28,display:"flex",flexDirection:"column",gap:9}}>
-              {["5 board cases/month","Quiz mode","Drug reference","Teaching mode","Case of the Day","Weekly Digest","Jobs board","All directories"].map(f=>(
-                <li key={f} style={{fontSize:14,color:SLATE2,display:"flex",alignItems:"center",gap:10}}><span style={{color:TEAL,fontWeight:700}}>✓</span>{f}</li>
-              ))}
-            </ul>
-            <button onClick={()=>go("app")} style={{width:"100%",padding:13,borderRadius:10,border:"1px solid rgba(255,255,255,0.15)",background:"rgba(255,255,255,0.07)",color:WHITE,fontWeight:700,fontSize:15,cursor:"pointer",fontFamily:"'DM Sans',sans-serif"}}>Get Started Free</button>
-          </div>
-          <div style={{background:"linear-gradient(135deg,rgba(0,201,177,0.12),rgba(0,168,150,0.04))",border:"1px solid rgba(0,201,177,0.45)",borderRadius:22,padding:"36px 32px",textAlign:"left",boxShadow:"0 8px 48px rgba(0,201,177,0.18)"}}>
-            <div style={{display:"inline-block",background:TEAL,color:NAVY,fontSize:11,fontWeight:700,fontFamily:"monospace",padding:"3px 10px",borderRadius:4,letterSpacing:1,textTransform:"uppercase",marginBottom:14}}>Most Popular</div>
-            <div style={{fontFamily:"'DM Mono',monospace",fontSize:11,color:SLATE,letterSpacing:2,textTransform:"uppercase",marginBottom:12}}>Pro</div>
-            <div style={{fontFamily:"'Playfair Display',serif",fontSize:52,fontWeight:800,color:WHITE,lineHeight:1,marginBottom:6}}>$19<span style={{fontSize:18,color:SLATE}}>/mo</span></div>
-            <p style={{fontSize:14,color:SLATE2,marginBottom:24}}>The full board exam experience.</p>
-            <ul style={{listStyle:"none",marginBottom:28,display:"flex",flexDirection:"column",gap:9}}>
-              {["Unlimited board cases","Full quiz bank","🎙 Voice exam mode","AI performance scoring","Progress tracking","Priority support","All free features included"].map(f=>(
-                <li key={f} style={{fontSize:14,color:SLATE2,display:"flex",alignItems:"center",gap:10}}><span style={{color:TEAL,fontWeight:700}}>✓</span>{f}</li>
-              ))}
-            </ul>
-            <button onClick={()=>go("app")} style={{width:"100%",padding:13,borderRadius:10,border:"none",background:"linear-gradient(135deg,#00c9b1,#00a896)",color:NAVY,fontWeight:700,fontSize:15,cursor:"pointer",fontFamily:"'DM Sans',sans-serif",boxShadow:"0 4px 18px rgba(0,201,177,0.35)"}}>Start Free Trial →</button>
-          </div>
-        </div>
-        <p style={{marginTop:20,fontSize:13,color:SLATE,fontFamily:"monospace"}}>Residency program & institutional licensing available</p>
-      </section>
+
 
       {/* CTA */}
       <div style={{textAlign:"center",padding:"80px 24px",background:"radial-gradient(ellipse 80% 60% at 50% 50%,rgba(0,201,177,0.07) 0%,transparent 70%)"}}>
