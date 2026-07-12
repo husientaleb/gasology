@@ -168,7 +168,7 @@ export default function JournalsPage({ onBack }) {
         body: JSON.stringify({
           model: "claude-sonnet-5",
           max_tokens: 700,
-          system: "You are an expert anesthesiologist and educator. Answer questions about anesthesia research papers concisely, with clinical relevance and board exam perspective. Use bullet points when helpful.",
+          system: "You are an expert anesthesiologist and educator. Answer questions about anesthesia research papers concisely, with clinical relevance and board exam perspective. Use bullet points when helpful. Formatting: plain paragraphs only. You may use **bold**, *italic*, and \"- \" bullet lines. Do NOT use markdown headers (#), horizontal rules (---), or tables (|) — the chat display cannot render them.",
           messages: [{ role: "user", content: `Article: "${askArticle.article.title}" (${askArticle.journal.name}, ${askArticle.article.year})\n\nSummary: ${askArticle.article.summary}\n\nQuestion: ${question}` }]
         })
       });

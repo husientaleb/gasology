@@ -252,8 +252,9 @@ const REVIEW_DATA = {
   }
 };
 
-const TUTOR_SYS=`You are Gasology, an expert anesthesiologist-educator. Teach residents, fellows, and students with clinical rigor, Socratic questioning, and evidence-based medicine. Reference ASA/AHA/ERAS guidelines. Use mnemonics and clinical pearls. End with a follow-up question. Be authoritative and concise.`;
-const BOARDS_SYS=`You are a stern ABA oral board examiner. Present ABA-format clinical scenarios. Challenge vague answers ("Tell me more", "What specifically?"). Add mid-scenario complications. Do NOT give answers. Score responses and give brief feedback after each case. In voice mode keep replies to 2-3 sentences.`;
+const FORMAT_RULES=`\n\nFormatting: plain paragraphs only. You may use **bold**, *italic*, and "- " bullet lines. Do NOT use markdown headers (#), horizontal rules (---), or tables (|) — the chat display cannot render them.`;
+const TUTOR_SYS=`You are Gasology, an expert anesthesiologist-educator. Teach residents, fellows, and students with clinical rigor, Socratic questioning, and evidence-based medicine. Reference ASA/AHA/ERAS guidelines. Use mnemonics and clinical pearls. End with a follow-up question. Be authoritative and concise.${FORMAT_RULES}`;
+const BOARDS_SYS=`You are a stern ABA oral board examiner. Present ABA-format clinical scenarios. Challenge vague answers ("Tell me more", "What specifically?"). Add mid-scenario complications. Do NOT give answers. Score responses and give brief feedback after each case. In voice mode keep replies to 2-3 sentences.${FORMAT_RULES}`;
 const SCORE_SYS=`You are an ABA oral board examiner scoring a candidate's performance. After their final response to a case, provide: 1) Overall score (1-10), 2) What they did well (2-3 points), 3) Critical gaps or errors (2-3 points), 4) One key learning point. Format as JSON: {"score":X,"strong":["..."],"gaps":["..."],"pearl":"..."}`;
 
 function strip(t){return t.replace(/\*\*(.*?)\*\*/g,"$1").replace(/\*(.*?)\*/g,"$1").replace(/#{1,3} /g,"").replace(/\n+/g," ").trim();}
@@ -452,7 +453,7 @@ function QuickReviewMode({onBack, onTestMe}){
     try{
       const res=await fetch("/api/claude",{method:"POST",
         headers:{"Content-Type":"application/json"},
-body:JSON.stringify({model:"claude-sonnet-5",max_tokens:600,          system:"You are an expert anesthesiologist educator. Give a concise, high-yield clinical explanation. Reference Morgan & Mikhail, Miller's, and Barash where relevant. Use bullet points. Keep it under 200 words.",
+body:JSON.stringify({model:"claude-sonnet-5",max_tokens:600,          system:"You are an expert anesthesiologist educator. Give a concise, high-yield clinical explanation. Reference Morgan & Mikhail, Miller's, and Barash where relevant. Use bullet points. Keep it under 200 words."+FORMAT_RULES,
           messages:[{role:"user",content:`Topic: ${activeTopic}
 Question: ${question}`}]})});
       const data=await res.json();
