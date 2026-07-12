@@ -119,7 +119,7 @@ export default function JournalsPage({ onBack }) {
         headers: { "Content-Type": "application/json" },
         body: JSON.stringify({
           model: "claude-sonnet-5",
-          max_tokens: 2000,
+          max_tokens: 3000,
           system: "You are a senior anesthesiologist and journal editor. Return ONLY a valid JSON array. No markdown code fences. No text before or after the JSON array. Start your response with [ and end with ].",
           messages: [{ role: "user", content: prompt }]
         })

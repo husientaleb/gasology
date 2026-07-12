@@ -118,7 +118,7 @@ export default function CaseOfTheDay({ onBack }) {
         headers: { "Content-Type": "application/json" },
         body: JSON.stringify({
           model: "claude-sonnet-5",
-          max_tokens: 2000,
+          max_tokens: 4000,
           system: "You are an ABA oral board examiner. Return ONLY valid JSON. No markdown fences. No extra text before or after the JSON.",
           messages: [{ role: "user", content: CASE_PROMPT(topic, level, daySeed) }]
         })
