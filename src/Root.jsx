@@ -1,4 +1,4 @@
-import { useState } from "react";
+import { useState, useEffect } from "react";
 import { ResidencyDirectory, FellowshipDirectory } from "./Directory.jsx";
 import ConferencesPage from "./Conferences.jsx";
 import JournalsPage from "./Journals.jsx";
@@ -6,6 +6,14 @@ import CaseOfTheDay from "./CaseOfTheDay.jsx";
 import WeeklyDigest from "./WeeklyDigest.jsx";
 import JobsBoard from "./JobsBoard.jsx";
 import App from "./App.jsx";
+import { trackPageView } from "./analytics.js";
+
+const PAGE_TITLES = {
+  home: "Home", app: "Board Prep", residency: "Residency Directory",
+  fellowship: "Fellowship Directory", conferences: "Conferences",
+  journals: "Journals", digest: "Weekly Digest", case: "Case of the Day",
+  jobs: "Jobs Board",
+};
 
 const NAVY="#08172e",NAVY2="#0f2240",TEAL="#00c9b1",TEAL2="#00a896";
 const SLATE="#6e90b8",SLATE2="#a8c0d8",WHITE="#f0f6ff";
@@ -49,6 +57,8 @@ export default function Root(){
   const [submitted,setSubmitted]=useState(false);
 
   const go=(p)=>{setPage(p);setMobileOpen(false);window.scrollTo(0,0);};
+
+  useEffect(()=>{trackPageView(`/${page}`,`Gasology — ${PAGE_TITLES[page]||page}`);},[page]);
 
   if(page==="app")         return <App/>;
   if(page==="residency")   return <ResidencyDirectory   onBack={()=>go("home")}/>;
