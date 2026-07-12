@@ -291,7 +291,7 @@ export default function JobsBoard({ onBack }) {
       const res = await fetch("/api/claude", {
         method:"POST", headers:{"Content-Type":"application/json"},
         body: JSON.stringify({
-          model:"claude-sonnet-4-20250514", max_tokens:4000,
+          model:"claude-sonnet-5", max_tokens:4000,
           system:"You are a medical recruiting expert. Return ONLY valid JSON. No markdown fences. Start your response with { and end with }.",
           messages:[{role:"user",content:JOBS_PROMPT(weekSeed)}]
         })
@@ -318,7 +318,7 @@ export default function JobsBoard({ onBack }) {
       const res = await fetch("/api/claude",{
         method:"POST",headers:{"Content-Type":"application/json"},
         body:JSON.stringify({
-          model:"claude-sonnet-4-20250514",max_tokens:3000,
+          model:"claude-sonnet-5",max_tokens:3000,
           system:"You are a medical recruiting expert. Return ONLY a valid JSON array. No markdown. Start with [ and end with ].",
           messages:[{role:"user",content:SEARCH_PROMPT(q,weekSeed)}]
         })

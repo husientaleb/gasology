@@ -246,7 +246,7 @@ export default function WeeklyDigest({ onBack }) {
         method: "POST",
         headers: { "Content-Type": "application/json" },
         body: JSON.stringify({
-          model: "claude-sonnet-4-20250514",
+          model: "claude-sonnet-5",
           max_tokens: 3000,
           system: "You are a senior anesthesiologist writing a weekly journal digest. Return ONLY valid JSON. No markdown. No text outside the JSON object. Begin your response with { and end with }.",
           messages: [{ role: "user", content: DIGEST_PROMPT(weekSeed) }]
@@ -273,7 +273,7 @@ export default function WeeklyDigest({ onBack }) {
         method: "POST",
         headers: { "Content-Type": "application/json" },
         body: JSON.stringify({
-          model: "claude-sonnet-4-20250514",
+          model: "claude-sonnet-5",
           max_tokens: 2500,
           system: "You are a senior anesthesiologist. Return ONLY a valid JSON array. No markdown. Begin with [ and end with ].",
           messages: [{ role: "user", content: TOPIC_PROMPT(topic, weekSeed) }]
