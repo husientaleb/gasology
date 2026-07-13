@@ -12,6 +12,7 @@ const WeeklyDigest        = lazy(() => import("./WeeklyDigest.jsx"));
 const JobsBoard           = lazy(() => import("./JobsBoard.jsx"));
 const App                 = lazy(() => import("./App.jsx"));
 const HistoryOfTheDay     = lazy(() => import("./HistoryOfTheDay.jsx"));
+const PollOfTheDay        = lazy(() => import("./PollOfTheDay.jsx"));
 
 const NAVY_BG="#08172e";
 function PageLoader(){
@@ -183,6 +184,11 @@ export default function Root(){
       {/* GAS HISTORY — daily rotating anesthesia history story */}
       <Suspense fallback={null}>
         <HistoryOfTheDay/>
+      </Suspense>
+
+      {/* POLL OF THE DAY — daily board-style question with live community results */}
+      <Suspense fallback={null}>
+        <PollOfTheDay/>
       </Suspense>
 
       {/* RESOURCE HUB */}
