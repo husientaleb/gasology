@@ -11,6 +11,8 @@ function getDaySeed() {
   return `${d.getFullYear()}-${d.getMonth()}-${d.getDate()}`;
 }
 
+// Must stay in sync with CASE_TOPICS in api/case.js — the server derives
+// the day's topic from the same list when generating and caching the case.
 const CASE_TOPICS = [
   "Difficult Airway Management",
   "Cardiac Anesthesia — Severe Aortic Stenosis",
@@ -52,32 +54,6 @@ const LEVELS = [
   { num: 5, label: "Attending",  emoji: "⭐", color: RED,    points: 50 },
 ];
 
-const CASE_PROMPT = (topic, level, seed) => `You are an ABA oral board examiner. Today's seed: ${seed}.
-
-Generate a clinical anesthesia case about: "${topic}"
-Difficulty level: ${level.label}
-
-Return ONLY valid JSON (no markdown, no preamble):
-{
-  "stem": "2-3 sentence clinical scenario with patient demographics, presentation, and key vitals/labs",
-  "questions": [
-    {
-      "id": 1,
-      "text": "Question text (clinical, specific, board-style)",
-      "options": ["A. Option text", "B. Option text", "C. Option text", "D. Option text"],
-      "correct": 0,
-      "explanation": "2-3 sentence explanation of why this is correct and why others are wrong. Include a clinical pearl.",
-      "pearl": "One memorable high-yield teaching point in one sentence"
-    },
-    { "id": 2, ... },
-    { "id": 3, ... },
-    { "id": 4, ... },
-    { "id": 5, ... }
-  ]
-}
-
-Make questions progressively harder (Q1 easiest, Q5 hardest). Each question must be clinically distinct — cover different aspects: pharmacology, physiology, management, complications, guidelines. Options must be plausible. One clearly correct answer per question.`;
-
 export default function CaseOfTheDay({ onBack }) {
   const [phase, setPhase]         = useState("intro");    // intro | loading | playing | results
   const [caseData, setCaseData]   = useState(null);
@@ -113,21 +89,11 @@ export default function CaseOfTheDay({ onBack }) {
   const loadCase = async () => {
     setPhase("loading"); setError("");
     try {
-      const res = await fetch("/api/claude", {
-        method: "POST",
-        headers: { "Content-Type": "application/json" },
-        body: JSON.stringify({
-          model: "claude-sonnet-5",
-          max_tokens: 4000,
-          thinking: { type: "disabled" },
-          system: "You are an ABA oral board examiner. Return ONLY valid JSON. No markdown fences. No extra text before or after the JSON.",
-          messages: [{ role: "user", content: CASE_PROMPT(topic, level, daySeed) }]
-        })
-      });
-      const data = await res.json();
-      const raw = data.content?.map(b => b.text || "").join("") || "";
-      const clean = raw.replace(/```json|```/g, "").trim();
-      const parsed = JSON.parse(clean);
+      // Server generates once per day+level and caches in Redis — everyone
+      // after the first player gets the case instantly (see api/case.js).
+      const res = await fetch(`/api/case?day=${daySeed}&level=${encodeURIComponent(level.label)}`);
+      if (!res.ok) throw new Error("case_fetch_failed");
+      const parsed = await res.json();
       setCaseData(parsed);
       setPhase("playing");
       setQIndex(0); setAnswers([]); setScore(0); setStreak(0);

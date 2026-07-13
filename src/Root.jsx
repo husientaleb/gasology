@@ -71,6 +71,15 @@ export default function Root(){
 
   const go=(p)=>{setPage(p);setMobileOpen(false);window.scrollTo(0,0);};
 
+  // Store the signup, then launch the app. Fire-and-forget: a storage hiccup
+  // should never block the user from getting in.
+  const submitEmail=()=>{
+    if(!email)return;
+    setSubmitted(true);
+    fetch("/api/subscribe",{method:"POST",headers:{"Content-Type":"application/json"},body:JSON.stringify({email})}).catch(()=>{});
+    setTimeout(()=>go("app"),1200);
+  };
+
   useEffect(()=>{trackPageView(`/${page}`,`Gasology — ${PAGE_TITLES[page]||page}`);},[page]);
 
   if(page!=="home"){
@@ -168,9 +177,9 @@ export default function Root(){
           </p>
           <div className="hero-row" style={{display:"flex",gap:12,maxWidth:490,margin:"0 auto 18px",animation:"fadeUp 0.5s 0.3s ease both"}}>
             <input type="email" placeholder="Enter your email address" value={email} onChange={e=>setEmail(e.target.value)}
-              onKeyDown={e=>e.key==="Enter"&&email&&(setSubmitted(true),setTimeout(()=>go("app"),1200))}
+              onKeyDown={e=>e.key==="Enter"&&submitEmail()}
               style={{flex:1,padding:"14px 18px",borderRadius:10,border:"1px solid rgba(255,255,255,0.14)",background:"rgba(255,255,255,0.07)",color:WHITE,fontSize:15,fontFamily:"'DM Sans',sans-serif",outline:"none"}}/>
-            <button onClick={()=>email&&(setSubmitted(true),setTimeout(()=>go("app"),1200))}
+            <button onClick={submitEmail}
               style={{padding:"14px 22px",borderRadius:10,border:"none",background:"linear-gradient(135deg,#00c9b1,#00a896)",color:NAVY,fontWeight:700,fontSize:15,cursor:"pointer",whiteSpace:"nowrap",boxShadow:"0 4px 18px rgba(0,201,177,0.4)"}}>
               {submitted?"Launching...":"Get Access →"}
             </button>
