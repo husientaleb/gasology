@@ -309,7 +309,6 @@ export default function WeeklyDigest({ onBack }) {
   return (
     <div style={{ height:"100vh", display:"flex", flexDirection:"column", background:NAVY, fontFamily:"Georgia,serif", overflow:"hidden" }}>
       <style>{`
-        @import url('https://fonts.googleapis.com/css2?family=Playfair+Display:ital,wght@0,700;0,800;1,700&family=DM+Sans:wght@300;400;500;700&family=DM+Mono:wght@400;500&display=swap');
         * { box-sizing:border-box; }
         ::-webkit-scrollbar { width:4px; }
         ::-webkit-scrollbar-thumb { background:#1e3a5f; border-radius:4px; }

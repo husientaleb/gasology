@@ -1,12 +1,24 @@
-import { useState, useEffect } from "react";
-import { ResidencyDirectory, FellowshipDirectory } from "./Directory.jsx";
-import ConferencesPage from "./Conferences.jsx";
-import JournalsPage from "./Journals.jsx";
-import CaseOfTheDay from "./CaseOfTheDay.jsx";
-import WeeklyDigest from "./WeeklyDigest.jsx";
-import JobsBoard from "./JobsBoard.jsx";
-import App from "./App.jsx";
+import { useState, useEffect, lazy, Suspense } from "react";
 import { trackPageView } from "./analytics.js";
+
+// Lazy-loaded so the landing page doesn't ship every page's JS up front —
+// each becomes its own chunk, fetched only when the user navigates to it.
+const ResidencyDirectory  = lazy(() => import("./Directory.jsx").then(m => ({ default: m.ResidencyDirectory })));
+const FellowshipDirectory = lazy(() => import("./Directory.jsx").then(m => ({ default: m.FellowshipDirectory })));
+const ConferencesPage     = lazy(() => import("./Conferences.jsx"));
+const JournalsPage        = lazy(() => import("./Journals.jsx"));
+const CaseOfTheDay        = lazy(() => import("./CaseOfTheDay.jsx"));
+const WeeklyDigest        = lazy(() => import("./WeeklyDigest.jsx"));
+const JobsBoard           = lazy(() => import("./JobsBoard.jsx"));
+const App                 = lazy(() => import("./App.jsx"));
+
+const NAVY_BG="#08172e";
+function PageLoader(){
+  return <div style={{minHeight:"100vh",display:"flex",alignItems:"center",justifyContent:"center",background:NAVY_BG}}>
+    <div style={{width:40,height:40,border:"3px solid #00c9b1",borderTopColor:"transparent",borderRadius:"50%",animation:"spin 0.8s linear infinite"}}/>
+    <style>{"@keyframes spin{to{transform:rotate(360deg)}}"}</style>
+  </div>;
+}
 
 const PAGE_TITLES = {
   home: "Home", app: "Board Prep", residency: "Residency Directory",
@@ -20,7 +32,6 @@ const SLATE="#6e90b8",SLATE2="#a8c0d8",WHITE="#f0f6ff";
 const GOLD="#f0bc3a",GREEN="#2ed47a",RED="#e05555",PURPLE="#a78bfa";
 
 const CSS=`
-@import url('https://fonts.googleapis.com/css2?family=Playfair+Display:ital,wght@0,700;0,800;1,700&family=DM+Sans:wght@300;400;500;700&family=DM+Mono:wght@400;500&display=swap');
 *,*::before,*::after{box-sizing:border-box;margin:0;padding:0}
 html{scroll-behavior:smooth}
 body{background:#08172e;color:#f0f6ff;font-family:'DM Sans',sans-serif;overflow-x:hidden}
@@ -60,14 +71,19 @@ export default function Root(){
 
   useEffect(()=>{trackPageView(`/${page}`,`Gasology — ${PAGE_TITLES[page]||page}`);},[page]);
 
-  if(page==="app")         return <App/>;
-  if(page==="residency")   return <ResidencyDirectory   onBack={()=>go("home")}/>;
-  if(page==="fellowship")  return <FellowshipDirectory  onBack={()=>go("home")}/>;
-  if(page==="conferences") return <ConferencesPage      onBack={()=>go("home")}/>;
-  if(page==="journals")    return <JournalsPage         onBack={()=>go("home")}/>;
-  if(page==="case")        return <CaseOfTheDay         onBack={()=>go("home")}/>;
-  if(page==="digest")      return <WeeklyDigest         onBack={()=>go("home")}/>;
-  if(page==="jobs")        return <JobsBoard            onBack={()=>go("home")}/>;
+  if(page!=="home"){
+    const pages={
+      app:         <App/>,
+      residency:   <ResidencyDirectory   onBack={()=>go("home")}/>,
+      fellowship:  <FellowshipDirectory  onBack={()=>go("home")}/>,
+      conferences: <ConferencesPage      onBack={()=>go("home")}/>,
+      journals:    <JournalsPage         onBack={()=>go("home")}/>,
+      case:        <CaseOfTheDay         onBack={()=>go("home")}/>,
+      digest:      <WeeklyDigest         onBack={()=>go("home")}/>,
+      jobs:        <JobsBoard            onBack={()=>go("home")}/>,
+    };
+    return <Suspense fallback={<PageLoader/>}>{pages[page]}</Suspense>;
+  }
 
   const NAV=[
     {label:"🤖 Board Prep",   page:"app",          color:TEAL},

@@ -181,7 +181,6 @@ export default function CaseOfTheDay({ onBack }) {
   if (phase === "intro") return (
     <div style={{ minHeight:"100vh", background:`linear-gradient(150deg,${NAVY},${NAVY2})`, display:"flex", flexDirection:"column", fontFamily:"Georgia,serif", padding:"0 0 40px" }}>
       <style>{`
-        @import url('https://fonts.googleapis.com/css2?family=Playfair+Display:ital,wght@0,700;0,800;1,700&family=DM+Sans:wght@400;500;700&family=DM+Mono:wght@400;500&display=swap');
         *{box-sizing:border-box}
         @keyframes fadeUp{from{opacity:0;transform:translateY(18px)}to{opacity:1;transform:translateY(0)}}
         @keyframes pulse{0%,100%{opacity:1;transform:scale(1)}50%{opacity:0.5;transform:scale(1.3)}}
@@ -279,7 +278,6 @@ export default function CaseOfTheDay({ onBack }) {
     return (
       <div style={{ minHeight:"100vh", background:`linear-gradient(150deg,${NAVY},${NAVY2})`, display:"flex", flexDirection:"column", fontFamily:"Georgia,serif" }}>
         <style>{`
-          @import url('https://fonts.googleapis.com/css2?family=Playfair+Display:ital,wght@0,700;0,800;1,700&family=DM+Sans:wght@400;500;700&family=DM+Mono:wght@400;500&display=swap');
           *{box-sizing:border-box}
           @keyframes fadeUp{from{opacity:0;transform:translateY(14px)}to{opacity:1;transform:translateY(0)}}
           @keyframes popIn{from{opacity:0;transform:scale(0.92)}to{opacity:1;transform:scale(1)}}
@@ -421,7 +419,6 @@ export default function CaseOfTheDay({ onBack }) {
     return (
       <div style={{ minHeight:"100vh", background:`linear-gradient(150deg,${NAVY},${NAVY2})`, display:"flex", flexDirection:"column", fontFamily:"Georgia,serif" }}>
         <style>{`
-          @import url('https://fonts.googleapis.com/css2?family=Playfair+Display:ital,wght@0,700;0,800;1,700&family=DM+Sans:wght@400;500;700&family=DM+Mono:wght@400;500&display=swap');
           *{box-sizing:border-box}
           @keyframes fadeUp{from{opacity:0;transform:translateY(18px)}to{opacity:1;transform:translateY(0)}}
           @keyframes popIn{from{opacity:0;transform:scale(0.88)}to{opacity:1;transform:scale(1)}}

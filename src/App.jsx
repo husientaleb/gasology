@@ -420,7 +420,6 @@ function PharmaMode({onBack}){
 
 // ── GLOBAL CSS ──
 const globalCSS=`
-  @import url('https://fonts.googleapis.com/css2?family=Playfair+Display:wght@700&family=Source+Serif+4:wght@400;600&display=swap');
   *{box-sizing:border-box;margin:0;padding:0}
   @keyframes fadeUp{from{opacity:0;transform:translateY(8px)}to{opacity:1;transform:translateY(0)}}
   @keyframes pop{from{opacity:0;transform:scale(0.93)}to{opacity:1;transform:scale(1)}}
@@ -466,7 +465,6 @@ Question: ${question}`}]})});
 
   return(
     <div style={{height:"100vh",display:"flex",flexDirection:"column",background:NAVY,fontFamily:"Georgia,serif",overflow:"hidden"}}>
-      <style>{`@import url('https://fonts.googleapis.com/css2?family=Playfair+Display:wght@700&family=Source+Serif+4:wght@400;600&display=swap');`}</style>
 
       {/* Header */}
       <div style={{background:NAVY2,borderBottom:`1px solid rgba(255,255,255,0.08)`,padding:"12px 20px",display:"flex",alignItems:"center",gap:"12px",flexShrink:0}}>
@@ -781,7 +779,6 @@ body:JSON.stringify({model:"claude-sonnet-5",max_tokens:900,system:sys,         
   if(screen==="home") return(
     <div style={{minHeight:"100vh",background:`linear-gradient(150deg,${NAVY},${NAVY2},#0d2644)`,display:"flex",alignItems:"center",justifyContent:"center",padding:"32px 20px",fontFamily:"Georgia,serif"}}>
       <style>{globalCSS}</style>
-      <script src="https://code.responsivevoice.org/responsivevoice.js?key=FREE" async/>
       <div style={{maxWidth:"680px",width:"100%",textAlign:"center"}}>
         {/* Logo */}
         <div style={{display:"flex",alignItems:"center",justifyContent:"center",gap:"16px",marginBottom:"6px"}}>
@@ -849,7 +846,6 @@ body:JSON.stringify({model:"claude-sonnet-5",max_tokens:900,system:sys,         
   return(
     <div style={{height:"100vh",display:"flex",flexDirection:"column",background:OFF,fontFamily:"Georgia,serif"}}>
       <style>{globalCSS}</style>
-      <script src="https://code.responsivevoice.org/responsivevoice.js?key=FREE" async/>
       {scoreCard&&<ScoreCard data={scoreCard} onClose={()=>setScoreCard(null)}/>}
 
       {/* Header */}
