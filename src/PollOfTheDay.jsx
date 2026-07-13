@@ -1,4 +1,5 @@
 import { useState, useEffect } from "react";
+import { getStreak, recordDailyAction } from "./streak.js";
 
 const SLATE="#6e90b8", SLATE2="#a8c0d8", WHITE="#f0f6ff";
 const PURPLE="#a78bfa", GREEN="#2ed47a", RED="#e05555";
@@ -58,6 +59,7 @@ export default function PollOfTheDay() {
   const [results, setResults]   = useState(null);   // {counts:[..], total} from API
   const [tallyDown, setTallyDown] = useState(false);
   const [busy, setBusy]         = useState(false);
+  const [streak, setStreak]     = useState(getStreak);
 
   // Returning visitor who already voted today: restore vote, fetch live tally.
   useEffect(() => {
@@ -75,6 +77,7 @@ export default function PollOfTheDay() {
     setBusy(true);
     setVoted(idx);
     localStorage.setItem(storageKey, String(idx));
+    setStreak(recordDailyAction());
     try {
       const r = await fetch("/api/poll", {
         method: "POST",
@@ -155,6 +158,9 @@ export default function PollOfTheDay() {
                 : tallyDown ? "Live tally unavailable right now"
                 : results ? `${results.total} vote${results.total === 1 ? "" : "s"} today`
                 : "Counting votes..."}
+              {revealed && streak.doneToday && streak.count > 0 && (
+                <span style={{ color:"#f0bc3a" }}>{streak.count === 1 ? " · 🔥 Streak started!" : ` · 🔥 ${streak.count}-day streak`}</span>
+              )}
             </span>
             <span style={{ fontSize:12, color:SLATE, fontFamily:"monospace" }}>New question at midnight</span>
           </div>
