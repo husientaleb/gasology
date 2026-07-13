@@ -11,6 +11,7 @@ const CaseOfTheDay        = lazy(() => import("./CaseOfTheDay.jsx"));
 const WeeklyDigest        = lazy(() => import("./WeeklyDigest.jsx"));
 const JobsBoard           = lazy(() => import("./JobsBoard.jsx"));
 const App                 = lazy(() => import("./App.jsx"));
+const HistoryOfTheDay     = lazy(() => import("./HistoryOfTheDay.jsx"));
 
 const NAVY_BG="#08172e";
 function PageLoader(){
@@ -178,6 +179,11 @@ export default function Root(){
           </button>
         </div>
       </section>
+
+      {/* GAS HISTORY — daily rotating anesthesia history story */}
+      <Suspense fallback={null}>
+        <HistoryOfTheDay/>
+      </Suspense>
 
       {/* RESOURCE HUB */}
       <section style={{padding:"0 24px 80px"}}>
