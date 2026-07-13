@@ -1,5 +1,4 @@
 import { useState, useEffect } from "react";
-import { recordDailyAction } from "./streak.js";
 
 const NAVY="#08172e", NAVY2="#0f2240", NAVY3="#162d52";
 const TEAL="#00c9b1", TEAL2="#00a896";
@@ -70,7 +69,6 @@ export default function CaseOfTheDay({ onBack }) {
   const [topic, setTopic]         = useState("");
   const [timeLeft, setTimeLeft]   = useState(60);
   const [timerActive, setTimerActive] = useState(false);
-  const [streak, setStreakInfo]   = useState(null);   // daily-habit streak, set on finishing
 
   const daySeed = getDaySeed();
 
@@ -126,7 +124,6 @@ export default function CaseOfTheDay({ onBack }) {
 
   const handleNext = () => {
     if (qIndex >= caseData.questions.length - 1) {
-      setStreakInfo(recordDailyAction());
       setPhase("results");
     } else {
       setQIndex(i => i + 1);
@@ -449,8 +446,7 @@ export default function CaseOfTheDay({ onBack }) {
                 🔄 Try Again (New Level)
               </button>
               <div style={{ textAlign:"center", fontSize:12, color:SLATE, fontFamily:"monospace" }}>
-                {streak && streak.count > 0 && <span style={{ color:GOLD }}>🔥 {streak.count}-day streak{streak.best > streak.count ? ` · best ${streak.best}` : ""} · </span>}
-                New case available tomorrow · Come back daily to keep it going
+                New case available tomorrow · Come back daily to keep your streak
               </div>
               <button onClick={onBack}
                 style={{ padding:"12px", borderRadius:12, border:`1px solid rgba(255,255,255,0.15)`, background:"rgba(255,255,255,0.05)", color:SLATE2, fontWeight:600, fontSize:14, cursor:"pointer", fontFamily:"'DM Sans',sans-serif" }}>

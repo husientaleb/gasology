@@ -29,18 +29,6 @@ const PAGE_TITLES = {
   jobs: "Jobs Board",
 };
 
-// Real URLs per page — shareable links, browser back/forward, and refresh
-// keeps your place. vercel.json rewrites all non-API paths to index.html.
-const PATHS = {
-  home: "/", app: "/app", residency: "/residency", fellowship: "/fellowship",
-  conferences: "/conferences", journals: "/journals", digest: "/digest",
-  case: "/case", jobs: "/jobs",
-};
-const pageFromPath = () => {
-  const path = window.location.pathname.replace(/\/+$/, "") || "/";
-  return Object.keys(PATHS).find(k => PATHS[k] === path) || "home";
-};
-
 const NAVY="#08172e",NAVY2="#0f2240",TEAL="#00c9b1",TEAL2="#00a896";
 const SLATE="#6e90b8",SLATE2="#a8c0d8",WHITE="#f0f6ff";
 const GOLD="#f0bc3a",GREEN="#2ed47a",RED="#e05555",PURPLE="#a78bfa";
@@ -76,22 +64,12 @@ body{background:#08172e;color:#f0f6ff;font-family:'DM Sans',sans-serif;overflow-
 `;
 
 export default function Root(){
-  const [page,setPage]=useState(pageFromPath);
+  const [page,setPage]=useState("home");
   const [mobileOpen,setMobileOpen]=useState(false);
   const [email,setEmail]=useState("");
   const [submitted,setSubmitted]=useState(false);
 
-  const go=(p)=>{
-    setPage(p);setMobileOpen(false);window.scrollTo(0,0);
-    if(PATHS[p]&&window.location.pathname!==PATHS[p])window.history.pushState({},"",PATHS[p]);
-  };
-
-  // Browser back/forward
-  useEffect(()=>{
-    const onPop=()=>{setPage(pageFromPath());window.scrollTo(0,0);};
-    window.addEventListener("popstate",onPop);
-    return()=>window.removeEventListener("popstate",onPop);
-  },[]);
+  const go=(p)=>{setPage(p);setMobileOpen(false);window.scrollTo(0,0);};
 
   // Store the signup, then launch the app. Fire-and-forget: a storage hiccup
   // should never block the user from getting in.
