@@ -452,7 +452,7 @@ function QuickReviewMode({onBack, onTestMe}){
     try{
       const res=await fetch("/api/claude",{method:"POST",
         headers:{"Content-Type":"application/json"},
-body:JSON.stringify({model:"claude-sonnet-5",max_tokens:600,          system:"You are an expert anesthesiologist educator. Give a concise, high-yield clinical explanation. Reference Morgan & Mikhail, Miller's, and Barash where relevant. Use bullet points. Keep it under 200 words."+FORMAT_RULES,
+body:JSON.stringify({model:"claude-sonnet-5",max_tokens:1200,          system:"You are an expert anesthesiologist educator. Give a concise, high-yield clinical explanation. Reference Morgan & Mikhail, Miller's, and Barash where relevant. Use bullet points. Keep it under 200 words."+FORMAT_RULES,
           messages:[{role:"user",content:`Topic: ${activeTopic}
 Question: ${question}`}]})});
       const data=await res.json();
@@ -728,7 +728,7 @@ export default function Gasology(){
   const requestScore=async(history)=>{
     try{
       const res=await fetch("/api/claude",{method:"POST",headers:{"Content-Type":"application/json"},
-body:JSON.stringify({model:"claude-sonnet-5",max_tokens:600,system:SCORE_SYS,          messages:[{role:"user",content:"Score this oral board exchange:\n\n"+history.map(m=>`${m.role.toUpperCase()}: ${m.content}`).join("\n\n")}]})});
+body:JSON.stringify({model:"claude-sonnet-5",max_tokens:1200,system:SCORE_SYS,          messages:[{role:"user",content:"Score this oral board exchange:\n\n"+history.map(m=>`${m.role.toUpperCase()}: ${m.content}`).join("\n\n")}]})});
       const d=await res.json();
       const txt=d.content?.map(b=>b.text||"").join("")||"";
       const clean=txt.replace(/```json|```/g,"").trim();
@@ -764,7 +764,7 @@ body:JSON.stringify({model:"claude-sonnet-5",max_tokens:600,system:SCORE_SYS,   
     let reply="";
     try{
       const res=await fetch("/api/claude",{method:"POST",headers:{"Content-Type":"application/json"},
-body:JSON.stringify({model:"claude-sonnet-5",max_tokens:900,system:sys,stream:true,          messages:history.map(m=>({role:m.role,content:m.content}))})});
+body:JSON.stringify({model:"claude-sonnet-5",max_tokens:2000,system:sys,stream:true,          messages:history.map(m=>({role:m.role,content:m.content}))})});
       if(!res.ok||!res.body)throw new Error(`HTTP ${res.status}`);
       const reader=res.body.getReader();
       const decoder=new TextDecoder();
