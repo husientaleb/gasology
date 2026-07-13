@@ -760,14 +760,39 @@ body:JSON.stringify({model:"claude-sonnet-5",max_tokens:600,system:SCORE_SYS,   
       +(mode==="tutor"?`\n\nLearner level: ${level}`:"")
       +(topic?`\n\nFocus topic: ${topic}`:"")
       +(isVoice?"\n\nVOICE MODE: 2-3 sentences max, no markdown.":"");
+    setMsgs(p=>[...p,{role:"assistant",content:""}]);
+    let reply="";
     try{
       const res=await fetch("/api/claude",{method:"POST",headers:{"Content-Type":"application/json"},
-body:JSON.stringify({model:"claude-sonnet-5",max_tokens:900,system:sys,          messages:history.map(m=>({role:m.role,content:m.content}))})});
-      const d=await res.json();
-      const reply=d.content?.map(b=>b.text||"").join("")||"Error — please try again.";
-      setMsgs(p=>[...p,{role:"assistant",content:reply}]);
-      if(isVoice)setTimeout(()=>speak(reply),200);
-    }catch{setMsgs(p=>[...p,{role:"assistant",content:"Connection error. Try again."}]);}
+body:JSON.stringify({model:"claude-sonnet-5",max_tokens:900,system:sys,stream:true,          messages:history.map(m=>({role:m.role,content:m.content}))})});
+      if(!res.ok||!res.body)throw new Error(`HTTP ${res.status}`);
+      const reader=res.body.getReader();
+      const decoder=new TextDecoder();
+      let buf="";
+      while(true){
+        const {done,value}=await reader.read();
+        if(done)break;
+        buf+=decoder.decode(value,{stream:true});
+        const events=buf.split("\n\n");
+        buf=events.pop();
+        for(const evt of events){
+          const line=evt.split("\n").find(l=>l.startsWith("data:"));
+          if(!line)continue;
+          const jsonStr=line.slice(5).trim();
+          if(!jsonStr)continue;
+          let parsed;
+          try{parsed=JSON.parse(jsonStr);}catch{continue;}
+          if(parsed.type==="content_block_delta"&&parsed.delta?.type==="text_delta"){
+            reply+=parsed.delta.text;
+            setMsgs(p=>{const n=[...p];n[n.length-1]={role:"assistant",content:reply};return n;});
+          }else if(parsed.type==="error"){
+            throw new Error(parsed.error?.message||"Stream error");
+          }
+        }
+      }
+      if(!reply)setMsgs(p=>{const n=[...p];n[n.length-1]={role:"assistant",content:"Error — please try again."};return n;});
+      else if(isVoice)setTimeout(()=>speak(reply),200);
+    }catch{setMsgs(p=>{const n=[...p];n[n.length-1]={role:"assistant",content:"Connection error. Try again."};return n;});}
     finally{setBusy(false);}
   };
 
@@ -911,15 +936,13 @@ body:JSON.stringify({model:"claude-sonnet-5",max_tokens:900,system:sys,         
             {m.role==="assistant"&&<div style={{width:"32px",height:"32px",borderRadius:"8px",flexShrink:0,background:`linear-gradient(135deg,${TEAL},${TEAL2})`,display:"flex",alignItems:"center",justifyContent:"center",fontSize:"15px"}}>{mode==="tutor"?"🎓":"📋"}</div>}
             <div style={{maxWidth:"74%",padding:"12px 15px",borderRadius:m.role==="user"?"12px 4px 12px 12px":"4px 12px 12px 12px",background:m.role==="user"?`linear-gradient(135deg,${NAVY},${NAVY3})`:"white",color:m.role==="user"?WHITE:"#1a2e4a",fontSize:"14px",lineHeight:1.7,boxShadow:m.role==="user"?"0 3px 12px rgba(11,31,58,0.25)":"0 2px 8px rgba(0,0,0,0.07)",border:m.role==="assistant"?`1px solid ${SLATE2}`:"none",position:"relative"}}>
               {isVoice&&m.role==="assistant"&&i>0&&<button onClick={()=>speak(m.content)} style={{position:"absolute",top:"6px",right:"6px",background:"transparent",border:"none",cursor:"pointer",fontSize:"13px",opacity:0.4}}>🔊</button>}
-              <div dangerouslySetInnerHTML={{__html:fmt(m.content)}}/>
+              {busy&&i===msgs.length-1&&m.role==="assistant"&&!m.content
+                ?<div style={{display:"flex",gap:"5px"}}><span className="dot"/><span className="dot"/><span className="dot"/></div>
+                :<div dangerouslySetInnerHTML={{__html:fmt(m.content)}}/>}
             </div>
             {m.role==="user"&&<div style={{width:"32px",height:"32px",borderRadius:"8px",flexShrink:0,background:`linear-gradient(135deg,${GOLD},#e8a800)`,display:"flex",alignItems:"center",justifyContent:"center",fontSize:"12px",fontWeight:800,color:NAVY}}>{level[0]}</div>}
           </div>
         ))}
-        {busy&&<div style={{display:"flex",gap:"8px",alignItems:"flex-end"}}>
-          <div style={{width:"32px",height:"32px",borderRadius:"8px",background:`linear-gradient(135deg,${TEAL},${TEAL2})`,display:"flex",alignItems:"center",justifyContent:"center",fontSize:"15px"}}>{mode==="tutor"?"🎓":"📋"}</div>
-          <div style={{padding:"12px 16px",borderRadius:"4px 12px 12px 12px",background:"white",border:`1px solid ${SLATE2}`}}><div style={{display:"flex",gap:"5px"}}><span className="dot"/><span className="dot"/><span className="dot"/></div></div>
-        </div>}
         <div ref={bottomRef}/>
       </div>
 

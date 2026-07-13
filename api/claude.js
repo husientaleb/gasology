@@ -18,6 +18,21 @@ export default async function handler(req, res) {
       headers: { "Content-Type": "application/json", "x-api-key": process.env.ANTHROPIC_API_KEY, "anthropic-version": "2023-06-01" },
       body: JSON.stringify(req.body),
     });
+
+    if (req.body?.stream) {
+      res.status(response.status);
+      res.setHeader("Content-Type", "text/event-stream");
+      res.setHeader("Cache-Control", "no-cache, no-transform");
+      res.setHeader("Connection", "keep-alive");
+      const reader = response.body.getReader();
+      while (true) {
+        const { done, value } = await reader.read();
+        if (done) break;
+        res.write(value);
+      }
+      return res.end();
+    }
+
     const data = await response.json();
     return res.status(response.status).json(data);
   } catch (err) {
