@@ -13,6 +13,7 @@ const JobsBoard           = lazy(() => import("./JobsBoard.jsx"));
 const App                 = lazy(() => import("./App.jsx"));
 const HistoryOfTheDay     = lazy(() => import("./HistoryOfTheDay.jsx"));
 const PollOfTheDay        = lazy(() => import("./PollOfTheDay.jsx"));
+const ContactPage         = lazy(() => import("./Contact.jsx"));
 
 const NAVY_BG="#08172e";
 function PageLoader(){
@@ -26,7 +27,7 @@ const PAGE_TITLES = {
   home: "Home", app: "Board Prep", residency: "Residency Directory",
   fellowship: "Fellowship Directory", conferences: "Conferences",
   journals: "Journals", digest: "Weekly Digest", case: "Case of the Day",
-  jobs: "Jobs Board",
+  jobs: "Jobs Board", contact: "Contact Us",
 };
 
 // Real URLs per page — shareable links, browser back/forward, and refresh
@@ -34,7 +35,7 @@ const PAGE_TITLES = {
 const PATHS = {
   home: "/", app: "/app", residency: "/residency", fellowship: "/fellowship",
   conferences: "/conferences", journals: "/journals", digest: "/digest",
-  case: "/case", jobs: "/jobs",
+  case: "/case", jobs: "/jobs", contact: "/contact",
 };
 const pageFromPath = () => {
   const path = window.location.pathname.replace(/\/+$/, "") || "/";
@@ -114,6 +115,7 @@ export default function Root(){
       case:        <CaseOfTheDay         onBack={()=>go("home")}/>,
       digest:      <WeeklyDigest         onBack={()=>go("home")}/>,
       jobs:        <JobsBoard            onBack={()=>go("home")}/>,
+      contact:     <ContactPage          onBack={()=>go("home")}/>,
     };
     return <Suspense fallback={<PageLoader/>}>{pages[page]}</Suspense>;
   }
@@ -127,6 +129,7 @@ export default function Root(){
     {label:"📡 Weekly Digest",page:"digest",       color:SLATE2},
     {label:"🏆 Case of Day",  page:"case",         color:RED},
     {label:"💼 Jobs",         page:"jobs",         color:"#fb923c"},
+    {label:"📬 Contact",      page:"contact",      color:SLATE2},
   ];
 
   const CARDS=[
