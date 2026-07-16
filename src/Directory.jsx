@@ -185,39 +185,36 @@ const typeColors = {
   "Research / Academic Fellowship": SLATE2,
 };
 
-// ── PITCH EMAIL GENERATOR ───────────────────────────────────────────────────
+// ── PROGRAM INQUIRY EMAIL GENERATOR ─────────────────────────────────────────
 function PitchModal({program, onClose}){
-  const subject = `Gasology — AI Board Prep Tool for Your Anesthesia Residents`;
+  // Works for both directories: fellowships have a `type`, residencies don't.
+  const programName = program.type
+    ? `${program.type} Fellowship`
+    : "Anesthesiology Residency Program";
+  const subject = `Inquiry — ${programName} at ${program.institution}`;
   const body = `Dear ${program.director || "Program Director"},
 
-I hope this message finds you well. My name is [Your Name], and I am an anesthesia resident at [Your Institution].
+My name is [Your Name], and I am [a medical student at Your Institution / an anesthesia resident at Your Institution] interested in the ${programName} at ${program.institution}.
 
-I wanted to reach out to introduce Gasology (gasology.co) — a free AI-powered anesthesia education platform I built specifically for anesthesia trainees preparing for ABA oral boards.
+I am reaching out to learn more about your program. In particular, I would appreciate any information regarding:
+• The application timeline and requirements
+• [Rotations, research opportunities, or areas of focus you're curious about]
+• Opportunities to visit or connect with current trainees
 
-Gasology offers:
-• AI oral board examiner — simulates real ABA case scenarios with voice interaction
-• Performance scoring — detailed feedback after each case session
-• Quick Review — high-yield summaries from Morgan & Mikhail, Miller's, and Barash
-• Drug reference, quiz mode, and teaching mode
+I have attached my CV for your reference and would welcome the chance to speak with you or a member of your team.
 
-It is currently free for all trainees and designed to complement your existing curriculum.
-
-I would be honored if you would consider sharing it with your CA-1 through CA-3 residents and fellows at ${program.institution}. I am happy to provide a demo or answer any questions.
-
-Thank you for your time and for everything you do to train the next generation of anesthesiologists.
+Thank you very much for your time and consideration.
 
 Best regards,
 [Your Name]
 [Your Institution]
-[Your Email]
-
-gasology.co`;
+[Your Email / Phone]`;
 
   return(
     <div style={{position:"fixed",inset:0,background:"rgba(0,0,0,0.8)",zIndex:200,display:"flex",alignItems:"center",justifyContent:"center",padding:"20px"}}>
       <div style={{background:NAVY2,border:`1px solid rgba(0,201,177,0.3)`,borderRadius:"16px",padding:"28px",maxWidth:"640px",width:"100%",maxHeight:"85vh",overflowY:"auto"}}>
         <div style={{display:"flex",justifyContent:"space-between",alignItems:"center",marginBottom:"16px"}}>
-          <div style={{fontFamily:"'Playfair Display',serif",fontSize:"18px",fontWeight:700,color:WHITE}}>📧 Pitch Email</div>
+          <div style={{fontFamily:"'Playfair Display',serif",fontSize:"18px",fontWeight:700,color:WHITE}}>📧 Contact Program</div>
           <button onClick={onClose} style={{background:"transparent",border:"none",color:SLATE,cursor:"pointer",fontSize:"20px"}}>✕</button>
         </div>
         <div style={{marginBottom:"12px"}}>
@@ -306,7 +303,7 @@ export function ResidencyDirectory({onBack}){
               <div style={{display:"flex",gap:"8px",flexDirection:"column"}}>
                 <button onClick={()=>setPitchTarget(p)}
                   style={{background:`${TEAL}15`,border:`1px solid ${TEAL}40`,color:TEAL,borderRadius:"7px",padding:"6px 14px",cursor:"pointer",fontSize:"11px",fontFamily:"monospace",fontWeight:700,whiteSpace:"nowrap"}}>
-                  📧 Pitch
+                  📧 Contact
                 </button>
                 {p.website&&<a href={p.website} target="_blank" rel="noreferrer"
                   style={{background:"rgba(255,255,255,0.05)",border:"1px solid rgba(255,255,255,0.1)",color:SLATE,borderRadius:"7px",padding:"6px 14px",cursor:"pointer",fontSize:"11px",fontFamily:"monospace",textDecoration:"none",textAlign:"center"}}>
@@ -402,7 +399,7 @@ export function FellowshipDirectory({onBack}){
                 <div style={{display:"flex",gap:"8px"}}>
                   <button onClick={()=>setPitchTarget(f)}
                     style={{flex:1,background:`${color}12`,border:`1px solid ${color}35`,color:color,borderRadius:"7px",padding:"7px",cursor:"pointer",fontSize:"11px",fontFamily:"monospace",fontWeight:700}}>
-                    📧 Pitch Gasology
+                    📧 Contact Program
                   </button>
                   {f.website&&<a href={f.website} target="_blank" rel="noreferrer"
                     style={{padding:"7px 14px",background:"rgba(255,255,255,0.05)",border:"1px solid rgba(255,255,255,0.1)",color:SLATE,borderRadius:"7px",cursor:"pointer",fontSize:"11px",fontFamily:"monospace",textDecoration:"none",display:"flex",alignItems:"center"}}>
