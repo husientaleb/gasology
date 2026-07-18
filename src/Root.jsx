@@ -1,5 +1,6 @@
 import { useState, useEffect, lazy, Suspense } from "react";
 import { trackPageView } from "./analytics.js";
+import { ROUTE_META } from "./data/seo.js";
 
 // Lazy-loaded so the landing page doesn't ship every page's JS up front —
 // each becomes its own chunk, fetched only when the user navigates to it.
@@ -14,6 +15,7 @@ const App                 = lazy(() => import("./App.jsx"));
 const HistoryOfTheDay     = lazy(() => import("./HistoryOfTheDay.jsx"));
 const PollOfTheDay        = lazy(() => import("./PollOfTheDay.jsx"));
 const ContactPage         = lazy(() => import("./Contact.jsx"));
+const ProgramDetail       = lazy(() => import("./Directory.jsx").then(m => ({ default: m.ProgramDetail })));
 
 const NAVY_BG="#08172e";
 function PageLoader(){
@@ -39,7 +41,13 @@ const PATHS = {
 };
 const pageFromPath = () => {
   const path = window.location.pathname.replace(/\/+$/, "") || "/";
-  return Object.keys(PATHS).find(k => PATHS[k] === path) || "home";
+  const known = Object.keys(PATHS).find(k => PATHS[k] === path);
+  if (known) return known;
+  // Per-program pages: /residency/<slug> and /fellowship/<slug> — page key
+  // is the path without the leading slash, e.g. "residency/ucla".
+  const m = path.match(/^\/(residency|fellowship)\/([a-z0-9-]+)$/);
+  if (m) return `${m[1]}/${m[2]}`;
+  return "home";
 };
 
 const NAVY="#08172e",NAVY2="#0f2240",TEAL="#00c9b1",TEAL2="#00a896";
@@ -84,7 +92,8 @@ export default function Root(){
 
   const go=(p)=>{
     setPage(p);setMobileOpen(false);window.scrollTo(0,0);
-    if(PATHS[p]&&window.location.pathname!==PATHS[p])window.history.pushState({},"",PATHS[p]);
+    const path = PATHS[p] || `/${p}`; // detail-page keys are already paths minus the slash
+    if(window.location.pathname!==path)window.history.pushState({},"",path);
   };
 
   // Browser back/forward
@@ -103,13 +112,30 @@ export default function Root(){
     setTimeout(()=>go("app"),1200);
   };
 
-  useEffect(()=>{trackPageView(`/${page}`,`Gasology — ${PAGE_TITLES[page]||page}`);},[page]);
+  useEffect(()=>{
+    trackPageView(`/${page}`,`Gasology — ${PAGE_TITLES[page]||page}`);
+    // Keep <head> in sync during client-side navigation so the tab title and
+    // shared links match the prerendered HTML. Program detail pages set their
+    // own title/description from program data (in ProgramDetail).
+    const meta = ROUTE_META[PATHS[page]];
+    if(meta){
+      document.title = meta.title;
+      const d = document.querySelector('meta[name="description"]');
+      if(d) d.setAttribute("content", meta.description);
+    }
+  },[page]);
 
   if(page!=="home"){
+    const detail = page.match(/^(residency|fellowship)\/(.+)$/);
+    if(detail){
+      return <Suspense fallback={<PageLoader/>}>
+        <ProgramDetail kind={detail[1]} slug={detail[2]} onBack={()=>go(detail[1])} onNav={go}/>
+      </Suspense>;
+    }
     const pages={
       app:         <App/>,
-      residency:   <ResidencyDirectory   onBack={()=>go("home")}/>,
-      fellowship:  <FellowshipDirectory  onBack={()=>go("home")}/>,
+      residency:   <ResidencyDirectory   onBack={()=>go("home")} onNav={go}/>,
+      fellowship:  <FellowshipDirectory  onBack={()=>go("home")} onNav={go}/>,
       conferences: <ConferencesPage      onBack={()=>go("home")}/>,
       journals:    <JournalsPage         onBack={()=>go("home")}/>,
       case:        <CaseOfTheDay         onBack={()=>go("home")}/>,
@@ -157,10 +183,10 @@ export default function Root(){
         {/* Desktop nav */}
         <div className="dnav" style={{display:"flex",alignItems:"center",gap:4,flex:1,justifyContent:"center",flexWrap:"wrap"}}>
           {NAV.map(item=>(
-            <button key={item.page} className="nbtn" onClick={()=>go(item.page)}
-              style={{background:`${item.color}14`,border:`1px solid ${item.color}40`,color:item.color,fontSize:12,fontWeight:700,cursor:"pointer",padding:"6px 12px",borderRadius:9,fontFamily:"'DM Sans',sans-serif",whiteSpace:"nowrap"}}>
+            <a key={item.page} className="nbtn" href={PATHS[item.page]} onClick={e=>{e.preventDefault();go(item.page);}}
+              style={{background:`${item.color}14`,border:`1px solid ${item.color}40`,color:item.color,fontSize:12,fontWeight:700,cursor:"pointer",padding:"6px 12px",borderRadius:9,fontFamily:"'DM Sans',sans-serif",whiteSpace:"nowrap",textDecoration:"none",display:"inline-block"}}>
               {item.label}
-            </button>
+            </a>
           ))}
         </div>
 
@@ -178,10 +204,10 @@ export default function Root(){
       {/* Mobile menu */}
       <div className={`mnav-menu${mobileOpen?" open":""}`}>
         {NAV.map(item=>(
-          <button key={item.page} onClick={()=>go(item.page)}
-            style={{background:`${item.color}12`,border:`1px solid ${item.color}35`,color:item.color,padding:"12px 16px",borderRadius:10,cursor:"pointer",fontSize:15,fontWeight:700,fontFamily:"'DM Sans',sans-serif",textAlign:"left",width:"100%"}}>
+          <a key={item.page} href={PATHS[item.page]} onClick={e=>{e.preventDefault();go(item.page);}}
+            style={{background:`${item.color}12`,border:`1px solid ${item.color}35`,color:item.color,padding:"12px 16px",borderRadius:10,cursor:"pointer",fontSize:15,fontWeight:700,fontFamily:"'DM Sans',sans-serif",textAlign:"left",width:"100%",textDecoration:"none",display:"block"}}>
             {item.label}
-          </button>
+          </a>
         ))}
       </div>
 
@@ -264,7 +290,8 @@ export default function Root(){
                     ))}
                   </div>
                 )}
-                <div style={{color:card.color,fontSize:14,fontFamily:"'DM Mono',monospace",fontWeight:700}}>{card.cta}</div>
+                <a href={PATHS[card.page]} onClick={e=>{e.preventDefault();e.stopPropagation();go(card.page);}}
+                  style={{color:card.color,fontSize:14,fontFamily:"'DM Mono',monospace",fontWeight:700,textDecoration:"none",display:"inline-block"}}>{card.cta}</a>
               </div>
             ))}
           </div>
@@ -317,7 +344,7 @@ export default function Root(){
           </div>
           <div style={{display:"flex",gap:14,flexWrap:"wrap",justifyContent:"center"}}>
             {NAV.map(item=>(
-              <button key={item.page} onClick={()=>go(item.page)} style={{background:"none",border:"none",color:SLATE,cursor:"pointer",fontSize:13,fontFamily:"'DM Sans',sans-serif"}}>{item.label}</button>
+              <a key={item.page} href={PATHS[item.page]} onClick={e=>{e.preventDefault();go(item.page);}} style={{background:"none",border:"none",color:SLATE,cursor:"pointer",fontSize:13,fontFamily:"'DM Sans',sans-serif",textDecoration:"none"}}>{item.label}</a>
             ))}
           </div>
           <div style={{fontSize:12,color:SLATE,fontFamily:"monospace"}}>© 2026 Gasology · Educational use only</div>
